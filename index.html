@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920, initial-scale=1">
+<title>Vizions TV</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap">
+<style>
+  :root { --accent: #2DD4BF; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Manrope', system-ui, sans-serif; }
+  #stage { width: 1920px; height: 1080px; position: fixed; top: 50%; left: 50%; transform-origin: center center; overflow: hidden; background: linear-gradient(160deg, #16221d 0%, #0c1512 55%, #070a09 100%); }
+  .blob { position: absolute; border-radius: 50%; filter: blur(6px); }
+  .blob-1 { width: 1100px; height: 1100px; left: -320px; top: -380px; background: radial-gradient(circle, rgba(45,120,95,0.55) 0%, rgba(45,120,95,0) 70%); }
+  .blob-2 { width: 900px; height: 900px; right: -260px; bottom: -320px; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent) 0%, transparent 70%); }
+  .blob-3 { width: 700px; height: 700px; right: 120px; top: -260px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 70%); }
+  .vignette-1 { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%); }
+  .vignette-2 { position: absolute; inset: 0; background: linear-gradient(120deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 45%); }
+  #greeting { position: absolute; left: 120px; top: 120px; font-size: 90px; font-weight: 300; letter-spacing: -0.01em; color: #F5F7F5; text-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  #datetime { position: absolute; right: 120px; top: 120px; text-align: right; }
+  #time { font-size: 56px; font-weight: 300; color: #F5F7F5; text-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  #date { font-size: 20px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-top: 6px; }
+  #lang-btn { position: absolute; left: 50%; top: 124px; transform: translateX(-50%); border: 1px solid rgba(255,255,255,0.22); cursor: pointer; padding: 14px 26px; display: flex; align-items: center; gap: 10px; font-family: inherit; color: #F5F7F5; background: rgba(255,255,255,0.09); backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%); border-radius: 999px; transition: transform .16s ease, background .16s ease, border-color .16s ease; }
+  #lang-btn:hover, #lang-btn:focus-visible { transform: translateX(-50%) scale(1.06); background: rgba(255,255,255,0.16); border-color: color-mix(in srgb, var(--accent) 70%, white); outline: none; }
+  #lang-btn:active { transform: translateX(-50%) scale(.97); }
+  #lang-btn span { font-size: 20px; font-weight: 700; letter-spacing: .06em; }
+  #ver-tv-btn { position: absolute; left: 120px; top: 648px; border: 2px solid var(--accent); cursor: pointer; width: 320px; height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; font-family: inherit; color: #F5F7F5; background: rgba(255,255,255,0.10); backdrop-filter: blur(44px) saturate(160%); -webkit-backdrop-filter: blur(44px) saturate(160%); border-radius: 28px; box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent), 0 30px 60px rgba(0,0,0,0.4); transition: transform .16s ease, box-shadow .16s ease; }
+  #ver-tv-btn:hover, #ver-tv-btn:focus-visible { transform: scale(1.04); box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 45%, transparent), 0 34px 70px rgba(0,0,0,.45); outline: none; }
+  #ver-tv-btn:active { transform: scale(.98); }
+  #ver-tv-btn span { font-size: 26px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="vignette-1"></div>
+  <div class="vignette-2"></div>
+
+  <div id="greeting">Buenas tardes</div>
+
+  <div id="datetime">
+    <div id="time">--:--</div>
+    <div id="date">CARGANDO</div>
+  </div>
+
+  <button id="lang-btn" aria-label="Cambiar idioma">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.6 2.6 4 5.8 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.8-4-9s1.4-6.4 4-9z"></path></svg>
+    <span id="lang-label">EN</span>
+  </button>
+
+  <button id="ver-tv-btn">
+    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2"></rect><path d="M8 21h8"></path><path d="M7 3l5 3 5-3"></path></svg>
+    <span id="ver-tv-label">VER TV</span>
+  </button>
+</div>
+
+<script>
+(function () {
+  // ---- Escalado a 1920x1080 para que se vea igual sin importar la resolución real ----
+  var stage = document.getElementById('stage');
+  function fitStage() {
+    var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+  }
+  window.addEventListener('resize', fitStage);
+  fitStage();
+
+  // ---- Idioma y contenido ----
+  var lang = 'es';
+  var TEXT = {
+    es: {
+      greeting: function (h) { if (h < 12) return 'Buenos días'; if (h < 19) return 'Buenas tardes'; return 'Buenas noches'; },
+      verTv: 'VER TV',
+      langChip: 'EN',
+      dias: ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'],
+      meses: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
+      dateFormat: function (now, dias, meses) { return dias[now.getDay()] + ', ' + now.getDate() + ' DE ' + meses[now.getMonth()]; }
+    },
+    en: {
+      greeting: function (h) { if (h < 12) return 'Good morning'; if (h < 19) return 'Good afternoon'; return 'Good evening'; },
+      verTv: 'WATCH TV',
+      langChip: 'ES',
+      dias: ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'],
+      meses: ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'],
+      dateFormat: function (now, dias, meses) { return dias[now.getDay()] + ', ' + meses[now.getMonth()] + ' ' + now.getDate(); }
+    }
+  };
+
+  var $greeting = document.getElementById('greeting');
+  var $time = document.getElementById('time');
+  var $date = document.getElementById('date');
+  var $langLabel = document.getElementById('lang-label');
+  var $verTvLabel = document.getElementById('ver-tv-label');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function render() {
+    var now = new Date();
+    var t = TEXT[lang];
+    $greeting.textContent = t.greeting(now.getHours());
+    $time.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+    $date.textContent = t.dateFormat(now, t.dias, t.meses);
+    $langLabel.textContent = t.langChip;
+    $verTvLabel.textContent = t.verTv;
+  }
+
+  document.getElementById('lang-btn').addEventListener('click', function () {
+    lang = (lang === 'es') ? 'en' : 'es';
+    render();
+  });
+
+  render();
+  setInterval(render, 15000);
+
+  // ---- Botón Ver TV ----
+  // La apk nativa (WebViewClient.shouldOverrideUrlLoading) intercepta este
+  // esquema y lanza com.iptv.blackeye. En un navegador normal no hace nada.
+  document.getElementById('ver-tv-btn').addEventListener('click', function () {
+    window.location.href = 'vizionstv://launch-blackeye';
+  });
+})();
+</script>
+</body>
+</html>
