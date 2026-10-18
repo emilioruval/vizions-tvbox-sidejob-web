@@ -4,156 +4,760 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=1920, initial-scale=1">
 <title>Vizions TV</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-  :root { --accent: #2DD4BF; }
-  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Manrope', system-ui, sans-serif; }
-  #stage { width: 1920px; height: 1080px; position: fixed; top: 50%; left: 50%; transform-origin: center center; overflow: hidden; background: linear-gradient(160deg, #16221d 0%, #0c1512 55%, #070a09 100%); }
-  .blob { position: absolute; border-radius: 50%; filter: blur(6px); }
+  /* Vizions Hospitality Lite — página de la caja (tv.vizionsnetworks.com dentro de TVLite).
+     El navegador de algunas cajas es viejo: nada de `inset`, `gap` en flex, `aspect-ratio`
+     ni `color-mix`; se escriben a mano. */
+  :root { --accent: #2DD4BF; --accent-claro: #5EEAD4; --tinta: #F5F7F5; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Manrope', system-ui, sans-serif; color: var(--tinta); }
+  button { font-family: inherit; color: inherit; }
+  #stage { width: 1920px; height: 1080px; position: fixed; top: 50%; left: 50%; overflow: hidden; background: linear-gradient(160deg, #16221d 0%, #0c1512 55%, #070a09 100%); }
+  .lleno { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+  .oculto { display: none !important; }
+
+  /* Fondo glass (por defecto) o el fondo que eligió la cuenta */
+  .blob { position: absolute; border-radius: 50%; }
   .blob-1 { width: 1100px; height: 1100px; left: -320px; top: -380px; background: radial-gradient(circle, rgba(45,120,95,0.55) 0%, rgba(45,120,95,0) 70%); }
-  .blob-2 { width: 900px; height: 900px; right: -260px; bottom: -320px; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent) 0%, transparent 70%); }
+  .blob-2 { width: 900px; height: 900px; right: -260px; bottom: -320px; background: radial-gradient(circle, rgba(45,212,191,0.35) 0%, rgba(45,212,191,0) 70%); }
   .blob-3 { width: 700px; height: 700px; right: 120px; top: -260px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 70%); }
-  .vignette-1 { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%); }
-  .vignette-2 { position: absolute; inset: 0; background: linear-gradient(120deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 45%); }
-  #greeting { position: absolute; left: 120px; top: 120px; font-size: 90px; font-weight: 300; letter-spacing: -0.01em; color: #F5F7F5; text-shadow: 0 4px 24px rgba(0,0,0,0.35); }
-  #datetime { position: absolute; right: 120px; top: 120px; text-align: right; }
-  #time { font-size: 56px; font-weight: 300; color: #F5F7F5; text-shadow: 0 4px 24px rgba(0,0,0,0.35); }
-  #date { font-size: 20px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-top: 6px; }
-  #lang-btn { position: absolute; left: 50%; top: 124px; transform: translateX(-50%); border: 1px solid rgba(255,255,255,0.22); cursor: pointer; padding: 14px 26px; display: flex; align-items: center; gap: 10px; font-family: inherit; color: #F5F7F5; background: rgba(255,255,255,0.09); backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%); border-radius: 999px; transition: transform .16s ease, background .16s ease, border-color .16s ease; }
-  #lang-btn:hover, #lang-btn:focus-visible { transform: translateX(-50%) scale(1.06); background: rgba(255,255,255,0.16); border-color: color-mix(in srgb, var(--accent) 70%, white); outline: none; }
-  #lang-btn:active { transform: translateX(-50%) scale(.97); }
-  #lang-btn span { font-size: 20px; font-weight: 700; letter-spacing: .06em; }
-  #ver-tv-btn { position: absolute; left: 120px; top: 648px; border: 2px solid var(--accent); cursor: pointer; width: 320px; height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; font-family: inherit; color: #F5F7F5; background: rgba(255,255,255,0.10); backdrop-filter: blur(44px) saturate(160%); -webkit-backdrop-filter: blur(44px) saturate(160%); border-radius: 28px; box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent), 0 30px 60px rgba(0,0,0,0.4); transition: transform .16s ease, box-shadow .16s ease; }
-  #ver-tv-btn:hover, #ver-tv-btn:focus-visible { transform: scale(1.04); box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 45%, transparent), 0 34px 70px rgba(0,0,0,.45); outline: none; }
-  #ver-tv-btn:active { transform: scale(.98); }
-  #ver-tv-btn span { font-size: 26px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-  #settings-btn { position: absolute; left: 760px; top: 648px; border: 1px solid rgba(255,255,255,0.22); cursor: pointer; width: 240px; height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; font-family: inherit; color: #F5F7F5; background: rgba(255,255,255,0.08); backdrop-filter: blur(44px) saturate(160%); -webkit-backdrop-filter: blur(44px) saturate(160%); border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transition: transform .16s ease, background .16s ease, border-color .16s ease; }
-  #apps-btn { position: absolute; left: 480px; top: 648px; border: 1px solid rgba(255,255,255,0.22); cursor: pointer; width: 240px; height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; font-family: inherit; color: #F5F7F5; background: rgba(255,255,255,0.08); backdrop-filter: blur(44px) saturate(160%); -webkit-backdrop-filter: blur(44px) saturate(160%); border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transition: transform .16s ease, background .16s ease, border-color .16s ease; }
-  #apps-btn:hover, #apps-btn:focus-visible { transform: scale(1.05); background: rgba(255,255,255,0.16); border-color: color-mix(in srgb, var(--accent) 70%, white); outline: none; }
-  #apps-btn:active { transform: scale(.97); }
-  #apps-btn span { font-size: 22px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-  #settings-btn:hover, #settings-btn:focus-visible { transform: scale(1.05); background: rgba(255,255,255,0.16); border-color: color-mix(in srgb, var(--accent) 70%, white); outline: none; }
-  #settings-btn:active { transform: scale(.97); }
-  #settings-btn span { font-size: 22px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .vin-1 { background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%); }
+  .vin-2 { background: linear-gradient(120deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 45%); }
+  #fondo-medio { background-size: cover; background-position: center; }
+  #fondo-medio video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+  #fondo-velo { background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 35%, rgba(0,0,0,0.6) 100%); }
+
+  .pantalla { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+
+  /* Vidrio */
+  .vidrio { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.22); -webkit-backdrop-filter: blur(44px) saturate(160%); backdrop-filter: blur(44px) saturate(160%); }
+
+  /* ── Inicio ───────────────────────────────── */
+  #saludo { position: absolute; left: 120px; top: 120px; font-size: 90px; font-weight: 300; letter-spacing: -0.01em; text-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  #esquina { position: absolute; right: 120px; top: 120px; text-align: right; }
+  #hora { font-size: 56px; font-weight: 300; text-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  #fecha { font-size: 20px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-top: 6px; }
+  #clima-mini { display: -webkit-box; display: flex; -webkit-box-pack: end; justify-content: flex-end; -webkit-box-align: center; align-items: center; margin-top: 18px; font-size: 24px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  #clima-mini svg { width: 30px; height: 30px; margin-right: 12px; }
+  #clima-mini .punto { opacity: 0.6; margin: 0 12px; }
+  #clima-mini .ciudad { font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.78); }
+
+  #idioma { position: absolute; left: 50%; top: 124px; margin-left: -66px; width: 132px; height: 56px; border-radius: 999px; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; cursor: pointer; background: rgba(255,255,255,0.09); }
+  #idioma svg { margin-right: 10px; }
+  #idioma span { font-size: 20px; font-weight: 700; letter-spacing: 0.06em; }
+
+  #fila { position: absolute; left: 120px; top: 648px; display: -webkit-box; display: flex; }
+  .tile { width: 240px; height: 210px; margin-right: 40px; border-radius: 28px; cursor: pointer; display: -webkit-box; display: flex; -webkit-box-orient: vertical; flex-direction: column; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease; }
+  .tile svg { margin-bottom: 22px; }
+  .tile span { font-size: 22px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .tile.principal { width: 320px; border: 2px solid var(--accent); background: rgba(255,255,255,0.10); box-shadow: 0 0 0 4px rgba(45,212,191,0.3), 0 30px 60px rgba(0,0,0,0.4); }
+  .tile.principal span { font-size: 26px; }
+  .foco, button:focus { outline: none; }
+  .tile:focus, .tile.foco { -webkit-transform: scale(1.06); transform: scale(1.06); background: rgba(255,255,255,0.18); border-color: #FFC83D; box-shadow: 0 0 0 6px rgba(255,200,61,0.45), 0 34px 70px rgba(0,0,0,.45); }
+  #idioma:focus { -webkit-transform: scale(1.06); transform: scale(1.06); border-color: #FFC83D; box-shadow: 0 0 0 5px rgba(255,200,61,0.4); }
+
+  /* Aviso (app no instalada, despertador) */
+  #aviso { position: absolute; left: 50%; bottom: 96px; -webkit-transform: translateX(-50%); transform: translateX(-50%); display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; padding: 28px 40px; border-radius: 26px; background: rgba(20,24,22,0.82); border: 1px solid rgba(251,191,36,0.55); box-shadow: 0 30px 70px rgba(0,0,0,0.5); z-index: 30; max-width: 1200px; }
+  #aviso .icono { width: 64px; height: 64px; border-radius: 50%; background: rgba(251,191,36,0.16); color: #FCD34D; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; margin-right: 26px; }
+  #aviso-titulo { font-size: 30px; font-weight: 700; }
+  #aviso-texto { font-size: 22px; color: rgba(245,247,245,0.82); margin-top: 6px; }
+
+  /* ── Activación ───────────────────────────── */
+  #activar-velo { background: rgba(6,10,8,0.3); }
+  #tarjeta-act { position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); width: 980px; box-sizing: border-box; padding: 64px 72px; border-radius: 36px; text-align: center; box-shadow: 0 40px 90px rgba(0,0,0,0.45); }
+  #tarjeta-act > * + * { margin-top: 30px; }
+  .llave { width: 88px; height: 88px; border-radius: 26px; margin: 0 auto; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; background: rgba(45,212,191,0.16); border: 1px solid rgba(45,212,191,0.5); color: var(--accent-claro); }
+  #tarjeta-act h1 { margin: 0; font-size: 56px; font-weight: 300; }
+  #tarjeta-act p { margin: 12px 0 0; font-size: 26px; color: rgba(245,247,245,0.85); }
+  #codigo { width: 560px; height: 120px; box-sizing: border-box; text-align: center; border-radius: 24px; border: 2px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.3); color: var(--tinta); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 64px; font-weight: 700; letter-spacing: 0.14em; }
+  #codigo:focus { outline: none; border-color: #FFC83D; box-shadow: 0 0 0 6px rgba(255,200,61,0.3); }
+  #codigo::-webkit-input-placeholder { color: rgba(245,247,245,0.28); }
+  #codigo.mal { border-color: #FB923C; }
+  #act-error { font-size: 24px; color: #FED7AA; min-height: 32px; }
+  #btn-activar { min-width: 360px; height: 88px; border-radius: 22px; border: 0; background: var(--accent); color: #062A24; font-size: 28px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+  #btn-activar:focus { box-shadow: 0 0 0 6px rgba(255,200,61,0.55); }
+  #btn-activar[disabled] { opacity: 0.55; }
+  .listo { width: 104px; height: 104px; border-radius: 50%; margin: 0 auto; background: var(--accent); color: #062A24; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; }
+
+  /* ── Extras ───────────────────────────────── */
+  .velo-oscuro { background: rgba(6,10,8,0.38); }
+  .pastilla-volver { position: absolute; left: 120px; top: 64px; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; height: 56px; padding: 0 30px 0 20px; border-radius: 999px; background: rgba(10,14,12,0.55); border: 1.5px solid rgba(255,255,255,0.5); font-size: 20px; font-weight: 700; letter-spacing: 0.22em; cursor: pointer; }
+  .pastilla-volver svg { margin-right: 12px; }
+  .pastilla-volver:focus { border-color: #FFC83D; box-shadow: 0 0 0 5px rgba(255,200,61,0.4); }
+  .titulo-lado { position: absolute; left: 120px; top: 200px; }
+  .titulo-lado .grande { font-size: 84px; font-weight: 300; line-height: 1; }
+  .titulo-lado .sub { font-size: 20px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-top: 12px; }
+  #tarjetas { position: absolute; left: 640px; top: 200px; width: 1160px; height: 560px; }
+  .tarjeta { position: absolute; top: 0; width: 564px; height: 560px; overflow: hidden; padding: 0; border-radius: 28px; border: 1px solid rgba(255,255,255,0.22); box-shadow: 0 20px 40px rgba(0,0,0,0.3); cursor: pointer; text-align: left; background: transparent; transition: transform .16s ease, box-shadow .16s ease; }
+  .tarjeta:first-child { left: 0; } .tarjeta + .tarjeta { left: 596px; }
+  .tarjeta .tinte { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+  .tarjeta .dibujo { position: absolute; left: 50%; top: 70px; margin-left: -85px; width: 170px; height: 170px; color: rgba(255,255,255,0.42); }
+  .tarjeta .sombra { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(to top, rgba(8,12,10,0.88) 0%, rgba(8,12,10,0.25) 48%, rgba(8,12,10,0) 70%); }
+  .tarjeta .ok { position: absolute; top: 20px; right: 20px; background: var(--accent); color: #062A24; font-weight: 800; font-size: 16px; letter-spacing: 0.14em; padding: 8px 16px; border-radius: 999px; display: none; }
+  .tarjeta .textos { position: absolute; left: 30px; right: 30px; bottom: 28px; }
+  .tarjeta .num { font-size: 16px; letter-spacing: 0.3em; font-weight: 800; color: var(--accent-claro); }
+  .tarjeta .nombre { font-size: 40px; font-weight: 600; line-height: 1.1; margin-top: 6px; }
+  .tarjeta .detalle { font-size: 20px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+  .tarjeta:focus { border: 3px solid #FFC83D; box-shadow: 0 0 0 7px rgba(255,200,61,0.3), 0 26px 50px rgba(0,0,0,0.45); -webkit-transform: scale(1.02); transform: scale(1.02); }
+  .tarjeta:focus .ok { display: block; }
+  .tarjeta.apagada .tinte { opacity: 0.55; }
+  .teclas { position: absolute; left: 120px; bottom: 64px; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; font-size: 19px; color: rgba(255,255,255,0.8); }
+  .teclas > span { margin-right: 34px; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; }
+  .tecla { display: inline-block; min-width: 24px; height: 34px; line-height: 34px; padding: 0 10px; margin-right: 12px; text-align: center; border-radius: 9px; border: 1.5px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); font-size: 15px; font-weight: 700; }
+  .tecla.blanca { background: #F5F7F5; color: #111; border-color: #F5F7F5; font-weight: 800; }
+
+  /* ── Clima ────────────────────────────────── */
+  #clima-ahora { position: absolute; left: 120px; top: 230px; width: 620px; }
+  #clima-ahora .temp { font-size: 190px; font-weight: 300; line-height: 1; }
+  #clima-ahora .desc { font-size: 34px; font-weight: 600; margin-top: 10px; }
+  #clima-ahora .ciudad { font-size: 20px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-top: 8px; }
+  #clima-ahora .datos { margin-top: 36px; font-size: 22px; color: rgba(255,255,255,0.85); }
+  #clima-ahora .datos div + div { margin-top: 10px; }
+  #clima-icono { position: absolute; left: 520px; top: 230px; width: 200px; height: 200px; color: rgba(255,255,255,0.9); }
+  #dias { position: absolute; left: 800px; top: 230px; width: 1000px; height: 520px; }
+  .dia { position: absolute; top: 0; width: 184px; height: 520px; box-sizing: border-box; border-radius: 26px; padding: 34px 0; text-align: center; }
+  .dia .nombre-dia { font-size: 22px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .dia svg { width: 84px; height: 84px; margin: 46px auto; display: block; color: rgba(255,255,255,0.92); }
+  .dia .max { font-size: 44px; font-weight: 600; }
+  .dia .min { font-size: 28px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+  .dia .lluvia { font-size: 20px; color: var(--accent-claro); margin-top: 26px; }
+  .sin-dato { font-size: 28px; color: rgba(255,255,255,0.7); }
+
+  /* ── Wallpaper (Ambient) ──────────────────── */
+  #ambient { background: #000; z-index: 20; }
+  .abm-capa { position: absolute; top: 0; right: 0; bottom: 0; left: 0; opacity: 0; transition: opacity .9s ease; }
+  .abm-capa.visible { opacity: 1; }
+  .abm-ph { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-size: cover; background-position: center; -webkit-animation: abmKb 24s linear forwards; animation: abmKb 24s linear forwards; }
+  @-webkit-keyframes abmKb { from { -webkit-transform: scale(1); } to { -webkit-transform: scale(1.07); } }
+  @keyframes abmKb { from { transform: scale(1); } to { transform: scale(1.07); } }
+  .abm-vid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+  #abm-sombra { position: absolute; left: 0; right: 0; bottom: 0; height: 32vh; z-index: 3; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.38)); }
+  #abm-hud { position: absolute; right: 63px; bottom: 56px; z-index: 4; text-align: right; color: #fff; text-shadow: 0 2px 14px rgba(0,0,0,.45); }
+  #abm-hora { font-size: 71px; font-weight: 300; line-height: 1; }
+  #abm-linea { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: end; justify-content: flex-end; font-size: 20px; margin-top: 11px; }
+  #abm-linea svg { width: 27px; height: 27px; margin: 0 9px 0 21px; }
+
+  #negro { background: #000; z-index: 40; }
 </style>
 </head>
 <body>
 <div id="stage">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="vignette-1"></div>
-  <div class="vignette-2"></div>
+  <div id="fondo-glass" class="lleno">
+    <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
+    <div class="lleno vin-1"></div><div class="lleno vin-2"></div>
+  </div>
+  <div id="fondo-medio" class="lleno oculto"></div>
+  <div id="fondo-velo" class="lleno oculto"></div>
 
-  <div id="greeting">Buenas tardes</div>
+  <!-- Activación con el código de 8 números -->
+  <section id="p-activar" class="pantalla oculto" aria-labelledby="act-titulo">
+    <div id="activar-velo" class="lleno"></div>
+    <div id="tarjeta-act" class="vidrio">
+      <div id="act-paso1">
+        <div class="llave"><svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"></circle><path d="M11 12l9-9M17 6l3 3M15 8l2 2"></path></svg></div>
+        <h1 id="act-titulo" style="margin-top:30px">Bienvenido</h1>
+        <p id="act-instruccion">Escribe el código de activación de 8 números que te dieron con tu caja.</p>
+        <div style="margin-top:30px">
+          <label for="codigo" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Código de activación</label>
+          <input id="codigo" type="text" inputmode="numeric" autocomplete="off" maxlength="9" placeholder="0000 0000">
+        </div>
+        <div id="act-error" role="alert" style="margin-top:22px"></div>
+        <button id="btn-activar" type="button" style="margin-top:22px">Activar</button>
+      </div>
+      <div id="act-paso2" class="oculto" role="status">
+        <div class="listo"><svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div>
+        <h1 style="margin-top:24px" id="listo-titulo">¡Listo!</h1>
+        <p id="listo-texto">Tu caja quedó activada. En un momento aparece tu pantalla de inicio.</p>
+      </div>
+    </div>
+  </section>
 
-  <div id="datetime">
-    <div id="time">--:--</div>
-    <div id="date">CARGANDO</div>
+  <!-- Inicio -->
+  <section id="p-inicio" class="pantalla oculto">
+    <div id="saludo">Buenas tardes</div>
+    <button id="idioma" class="vidrio" type="button" aria-label="Cambiar idioma">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.6 2.6 4 5.8 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.8-4-9s1.4-6.4 4-9z"></path></svg>
+      <span id="idioma-txt">EN</span>
+    </button>
+    <div id="esquina">
+      <div id="hora">--:--</div>
+      <div id="fecha"></div>
+      <div id="clima-mini" class="oculto"></div>
+    </div>
+    <div id="fila">
+      <button id="btn-vertv" class="tile principal" type="button">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="13" rx="2"></rect><path d="M8 21h8"></path><path d="M7 3l5 3 5-3"></path></svg>
+        <span id="t-vertv">Ver TV</span>
+      </button>
+      <button id="btn-apps" class="tile vidrio" type="button">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+        <span id="t-apps">Apps</span>
+      </button>
+      <button id="btn-extras" class="tile vidrio" type="button">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"></path></svg>
+        <span id="t-extras">Extras</span>
+      </button>
+      <button id="btn-ajustes" class="tile vidrio" type="button">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span id="t-ajustes">Ajustes</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Extras -->
+  <section id="p-extras" class="pantalla oculto">
+    <div class="lleno velo-oscuro"></div>
+    <button class="pastilla-volver" type="button" data-volver>
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+      <span class="t-inicio">INICIO</span>
+    </button>
+    <div class="titulo-lado"><div class="grande hora-lado">--:--</div><div class="sub" id="t-extras-sub">Extras</div></div>
+    <div id="tarjetas">
+      <button id="card-clima" class="tarjeta" type="button">
+        <div class="tinte" style="background: linear-gradient(160deg, #3b7fb3 0%, #8cc3e0 100%);"></div>
+        <svg class="dibujo" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"></circle><path d="M8 2v1.5M2 8h1.5M3.8 3.8l1 1M12.2 3.8l-1 1"></path><path d="M9 21h8a3.5 3.5 0 0 0 .5-6.96A5 5 0 0 0 8 15.2 3 3 0 0 0 9 21z"></path></svg>
+        <div class="sombra"></div><span class="ok t-ok">OK ABRIR</span>
+        <div class="textos"><div class="num">01</div><div class="nombre" id="t-clima">Clima</div><div class="detalle" id="clima-detalle">Pronóstico de 5 días</div></div>
+      </button>
+      <button id="card-despertador" class="tarjeta apagada" type="button">
+        <div class="tinte" style="background: linear-gradient(160deg, #4d3a6b 0%, #8a6fa8 100%);"></div>
+        <svg class="dibujo" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"></circle><path d="M12 9v4l2.5 2M5 4L2 7M19 4l3 3"></path></svg>
+        <div class="sombra"></div><span class="ok t-ok">OK ABRIR</span>
+        <div class="textos"><div class="num">02</div><div class="nombre" id="t-despertador">Despertador</div><div class="detalle" id="desp-detalle">Llega con la próxima actualización</div></div>
+      </button>
+    </div>
+    <div class="teclas">
+      <span><span class="tecla">◀ ▶</span><span class="t-navegar">Navegar</span></span>
+      <span><span class="tecla blanca">OK</span><span class="t-abrir">Abrir</span></span>
+      <span><span class="tecla">↩</span><span class="t-volver">Volver</span></span>
+    </div>
+  </section>
+
+  <!-- Clima -->
+  <section id="p-clima" class="pantalla oculto">
+    <div class="lleno velo-oscuro"></div>
+    <button class="pastilla-volver" type="button" data-volver>
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+      <span class="t-extras-may">EXTRAS</span>
+    </button>
+    <div id="clima-cuerpo"></div>
+  </section>
+
+  <!-- Wallpaper -->
+  <div id="ambient" class="lleno oculto" aria-hidden="true">
+    <div class="abm-capa" id="abm-a"></div>
+    <div class="abm-capa" id="abm-b"></div>
+    <div id="abm-sombra"></div>
+    <div id="abm-hud"><div id="abm-hora"></div><div id="abm-linea"></div></div>
   </div>
 
-  <button id="lang-btn" aria-label="Cambiar idioma">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.6 2.6 4 5.8 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.8-4-9s1.4-6.4 4-9z"></path></svg>
-    <span id="lang-label">EN</span>
-  </button>
+  <div id="aviso" class="oculto" role="alert">
+    <div class="icono"><svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+    <div><div id="aviso-titulo"></div><div id="aviso-texto"></div></div>
+  </div>
 
-  <button id="ver-tv-btn">
-    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2"></rect><path d="M8 21h8"></path><path d="M7 3l5 3 5-3"></path></svg>
-    <span id="ver-tv-label">VER TV</span>
-  </button>
-
-  <button id="apps-btn">
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
-    <span>APPS</span>
-  </button>
-
-  <button id="settings-btn">
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-    <span id="settings-label">AJUSTES</span>
-  </button>
+  <!-- Cliente vencido: la TV no muestra nada -->
+  <div id="negro" class="lleno oculto"></div>
 </div>
 
 <script>
 (function () {
-  // ---- Escalado a 1920x1080 para que se vea igual sin importar la resolución real ----
-  var stage = document.getElementById('stage');
-  function fitStage() {
-    var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-    stage.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
-  }
-  window.addEventListener('resize', fitStage);
-  fitStage();
+  'use strict';
+  // ── Configuración ──────────────────────────────────────────────────────────
+  var API = window.LITE_API || 'https://lite.vizionsnetworks.com';
+  var BLACKEYE = 'com.iptv.blackeye';
+  var CADA_CONFIG_MS = 60 * 1000;      // la caja pregunta cada minuto (así el panel la ve «conectada»)
+  var CADA_CLIMA_MS = 15 * 60 * 1000;
+  var CLAVES = { caja: 'lite.caja', disp: 'lite.dispositivo', config: 'lite.config', idioma: 'lite.idioma' };
 
-  // ---- Idioma y contenido ----
-  var lang = 'es';
-  var TEXT = {
+  function guardar(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } }
+  function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  // ── Escalado a 1920×1080 ──────────────────────────────────────────────────
+  var stage = $('stage');
+  function ajustar() {
+    var k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    var t = 'translate(-50%, -50%) scale(' + k + ')';
+    stage.style.webkitTransform = t; stage.style.transform = t;
+  }
+  window.addEventListener('resize', ajustar); ajustar();
+
+  // ── Textos ────────────────────────────────────────────────────────────────
+  var idioma = leer(CLAVES.idioma) === 'en' ? 'en' : 'es';
+  var T = {
     es: {
-      greeting: function (h) { if (h < 12) return 'Buenos días'; if (h < 19) return 'Buenas tardes'; return 'Buenas noches'; },
-      verTv: 'VER TV',
-      settings: 'AJUSTES',
-      langChip: 'EN',
+      saludo: function (h) { return h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches'; },
       dias: ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'],
+      diasCortos: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
       meses: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
-      dateFormat: function (now, dias, meses) { return dias[now.getDay()] + ', ' + now.getDate() + ' DE ' + meses[now.getMonth()]; }
+      fecha: function (d, t) { return t.dias[d.getDay()] + ', ' + d.getDate() + ' DE ' + t.meses[d.getMonth()]; },
+      chip: 'EN', vertv: 'Ver TV', apps: 'Apps', extras: 'Extras', ajustes: 'Ajustes', inicio: 'INICIO', extrasMay: 'EXTRAS',
+      ok: 'OK ABRIR', navegar: 'Navegar', abrir: 'Abrir', volver: 'Volver', clima: 'Clima', despertador: 'Despertador',
+      pronostico: 'Pronóstico de 5 días', ahora: ' ahora · Pronóstico de 5 días',
+      despProx: 'Llega con la próxima actualización de tu caja',
+      despTitulo: 'El despertador todavía no está disponible', despTexto: 'Llega con la próxima actualización de tu caja.',
+      noApp: function (n) { return 'No se pudo abrir ' + n; }, noAppTexto: 'La app no está instalada en esta caja.',
+      bienvenido: 'Bienvenido', instruccion: 'Escribe el código de activación de 8 números que te dieron con tu caja.',
+      activar: 'Activar', activando: 'Activando…', listo: '¡Listo!', listoTexto: 'Tu caja quedó activada. En un momento aparece tu pantalla de inicio.',
+      ocho: 'El código tiene 8 números.', sinRed: 'No hay conexión con el servidor. Revisa el internet y vuelve a intentar.',
+      baja: 'Esta caja fue dada de baja. Escribe un código nuevo.',
+      sensacion: 'Sensación', humedad: 'Humedad', viento: 'Viento', lluvia: 'lluvia', hoy: 'Hoy', sinClima: 'El clima no está disponible por ahora.',
+      desc: { 0: 'Despejado', 1: 'Mayormente despejado', 2: 'Parcialmente nublado', 3: 'Nublado', 45: 'Neblina', 48: 'Neblina', 51: 'Llovizna', 53: 'Llovizna', 55: 'Llovizna', 61: 'Lluvia ligera', 63: 'Lluvia', 65: 'Lluvia fuerte', 71: 'Nieve', 73: 'Nieve', 75: 'Nieve', 80: 'Chubascos', 81: 'Chubascos', 82: 'Chubascos fuertes', 95: 'Tormenta', 96: 'Tormenta', 99: 'Tormenta' }
     },
     en: {
-      greeting: function (h) { if (h < 12) return 'Good morning'; if (h < 19) return 'Good afternoon'; return 'Good evening'; },
-      verTv: 'WATCH TV',
-      settings: 'SETTINGS',
-      langChip: 'ES',
+      saludo: function (h) { return h < 12 ? 'Good morning' : h < 19 ? 'Good afternoon' : 'Good evening'; },
       dias: ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'],
+      diasCortos: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       meses: ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'],
-      dateFormat: function (now, dias, meses) { return dias[now.getDay()] + ', ' + meses[now.getMonth()] + ' ' + now.getDate(); }
+      fecha: function (d, t) { return t.dias[d.getDay()] + ', ' + t.meses[d.getMonth()] + ' ' + d.getDate(); },
+      chip: 'ES', vertv: 'Watch TV', apps: 'Apps', extras: 'Extras', ajustes: 'Settings', inicio: 'HOME', extrasMay: 'EXTRAS',
+      ok: 'OK OPEN', navegar: 'Move', abrir: 'Open', volver: 'Back', clima: 'Weather', despertador: 'Alarm clock',
+      pronostico: '5-day forecast', ahora: ' now · 5-day forecast',
+      despProx: 'Coming with your box’s next update',
+      despTitulo: 'The alarm clock is not available yet', despTexto: 'It comes with your box’s next update.',
+      noApp: function (n) { return 'Could not open ' + n; }, noAppTexto: 'The app is not installed on this box.',
+      bienvenido: 'Welcome', instruccion: 'Enter the 8-digit activation code you received with your box.',
+      activar: 'Activate', activando: 'Activating…', listo: 'All set!', listoTexto: 'Your box is active. Your home screen will appear in a moment.',
+      ocho: 'The code has 8 digits.', sinRed: 'Cannot reach the server. Check the internet and try again.',
+      baja: 'This box was deactivated. Enter a new code.',
+      sensacion: 'Feels like', humedad: 'Humidity', viento: 'Wind', lluvia: 'rain', hoy: 'Today', sinClima: 'Weather is not available right now.',
+      desc: { 0: 'Clear', 1: 'Mostly clear', 2: 'Partly cloudy', 3: 'Cloudy', 45: 'Fog', 48: 'Fog', 51: 'Drizzle', 53: 'Drizzle', 55: 'Drizzle', 61: 'Light rain', 63: 'Rain', 65: 'Heavy rain', 71: 'Snow', 73: 'Snow', 75: 'Snow', 80: 'Showers', 81: 'Showers', 82: 'Heavy showers', 95: 'Thunderstorm', 96: 'Thunderstorm', 99: 'Thunderstorm' }
     }
   };
+  function t() { return T[idioma]; }
 
-  var $greeting = document.getElementById('greeting');
-  var $time = document.getElementById('time');
-  var $date = document.getElementById('date');
-  var $langLabel = document.getElementById('lang-label');
-  var $verTvLabel = document.getElementById('ver-tv-label');
-  var $settingsLabel = document.getElementById('settings-label');
+  // ── Íconos del clima (código WMO) ─────────────────────────────────────────
+  var IC = {
+    sol: '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path>',
+    luna: '<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"></path>',
+    solnube: '<circle cx="8" cy="8" r="3"></circle><path d="M8 2v1.5M2 8h1.5M3.8 3.8l1 1M12.2 3.8l-1 1"></path><path d="M9 21h8a3.5 3.5 0 0 0 .5-6.96A5 5 0 0 0 8 15.2 3 3 0 0 0 9 21z"></path>',
+    nube: '<path d="M7 19h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 12.2 3.5 3.5 0 0 0 7 19z"></path>',
+    niebla: '<path d="M4 9h16M3 13h18M5 17h14"></path>',
+    lluvia: '<path d="M7 15h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 8.2 3.5 3.5 0 0 0 7 15z"></path><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"></path>',
+    nieve: '<path d="M7 15h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 8.2 3.5 3.5 0 0 0 7 15z"></path><path d="M8 19h.01M12 20h.01M16 19h.01"></path>',
+    tormenta: '<path d="M7 15h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 8.2 3.5 3.5 0 0 0 7 15z"></path><path d="M12 15l-2 4h3l-2 4"></path>'
+  };
+  function icono(codigo, dia) {
+    var c = Number(codigo);
+    if (c === 0 || c === 1) return dia === false ? 'luna' : 'sol';
+    if (c === 2) return 'solnube';
+    if (c === 3) return 'nube';
+    if (c === 45 || c === 48) return 'niebla';
+    if ((c >= 71 && c <= 77) || c === 85 || c === 86) return 'nieve';
+    if (c >= 95) return 'tormenta';
+    if (c >= 51) return 'lluvia';
+    return 'nube';
+  }
+  function svgIc(nombre, extra) {
+    return '<svg aria-hidden="true" ' + (extra || '') + ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + IC[nombre] + '</svg>';
+  }
+  function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
-  function pad(n) { return String(n).padStart(2, '0'); }
+  // ── Estado ────────────────────────────────────────────────────────────────
+  var cfg = null;         // configuración de la cuenta
+  var clima = null;       // datos de /api/caja/clima
+  var pantalla = null;    // 'activar' | 'inicio' | 'extras' | 'clima' | 'vencido'
+  var ultimaActividad = Date.now();
+  try { cfg = JSON.parse(leer(CLAVES.config) || 'null'); } catch (e) { cfg = null; }
 
-  function render() {
-    var now = new Date();
-    var t = TEXT[lang];
-    $greeting.textContent = t.greeting(now.getHours());
-    $time.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
-    $date.textContent = t.dateFormat(now, t.dias, t.meses);
-    $langLabel.textContent = t.langChip;
-    $verTvLabel.textContent = t.verTv;
-    $settingsLabel.textContent = t.settings;
+  // ── Llamadas a la caja nativa (TVLite) ────────────────────────────────────
+  function nativo(url) {
+    if (typeof window.__bancoNativo === 'function') { window.__bancoNativo(url); return; } // solo el banco de pruebas
+    window.location.href = url;
+  }
+  var appsCache = null, appsCacheT = 0;
+  function appsInstaladas() {
+    // El puente TVLite.getApps() existe desde la versión con el botón Apps. Si no está, no se sabe: se intenta abrir.
+    if (!window.TVLite || typeof window.TVLite.getApps !== 'function') return null;
+    if (appsCache && Date.now() - appsCacheT < 60000) return appsCache;
+    try { appsCache = JSON.parse(window.TVLite.getApps()).map(function (a) { return a.pkg; }); appsCacheT = Date.now(); }
+    catch (e) { appsCache = null; }
+    return appsCache;
   }
 
-  document.getElementById('lang-btn').addEventListener('click', function () {
-    lang = (lang === 'es') ? 'en' : 'es';
-    render();
+  // ── Servidor ──────────────────────────────────────────────────────────────
+  function dispositivo() {
+    var d = leer(CLAVES.disp);
+    if (!d) {
+      var b = new Uint8Array(16);
+      (window.crypto || window.msCrypto).getRandomValues(b);
+      d = 'web-' + Array.prototype.map.call(b, function (x) { return (x < 16 ? '0' : '') + x.toString(16); }).join('');
+      guardar(CLAVES.disp, d);
+    }
+    return d;
+  }
+  function pedir(metodo, ruta, cuerpo) {
+    var h = {};
+    var caja = leer(CLAVES.caja);
+    if (caja) h['X-Caja'] = caja;
+    if (cuerpo) h['Content-Type'] = 'application/json';
+    return fetch(API + ruta, { method: metodo, headers: h, body: cuerpo ? JSON.stringify(cuerpo) : undefined, cache: 'no-store' })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { j._status = r.status; return j; }); });
+  }
+
+  // ── Pantallas ─────────────────────────────────────────────────────────────
+  var SECCIONES = { activar: 'p-activar', inicio: 'p-inicio', extras: 'p-extras', clima: 'p-clima' };
+  function mostrar(nombre, focoId) {
+    pantalla = nombre;
+    Object.keys(SECCIONES).forEach(function (k) { $(SECCIONES[k]).classList.toggle('oculto', k !== nombre); });
+    $('negro').classList.toggle('oculto', nombre !== 'vencido');
+    if (nombre !== 'inicio') salirAmbient();
+    ocultarAviso();
+    var f = focoId ? $(focoId) : primerFoco();
+    if (f) f.focus();
+    ultimaActividad = Date.now();
+  }
+  function enfocables() {
+    var sec = SECCIONES[pantalla] ? $(SECCIONES[pantalla]) : null;
+    if (!sec) return [];
+    return Array.prototype.filter.call(sec.querySelectorAll('button, input'), function (el) { return el.offsetParent !== null && !el.disabled; });
+  }
+  function primerFoco() {
+    if (pantalla === 'inicio') return $('btn-vertv');
+    if (pantalla === 'extras') return $('card-clima');
+    if (pantalla === 'activar') return $('codigo');
+    var l = enfocables(); return l[0] || null;
+  }
+
+  // Navegación con flechas: el elemento más cercano en esa dirección.
+  function mover(dir) {
+    var lista = enfocables();
+    var actual = document.activeElement;
+    if (lista.indexOf(actual) < 0) { var p = primerFoco(); if (p) p.focus(); return; }
+    var a = actual.getBoundingClientRect();
+    var ax = a.left + a.width / 2, ay = a.top + a.height / 2;
+    var mejor = null, mejorD = Infinity;
+    lista.forEach(function (el) {
+      if (el === actual) return;
+      var r = el.getBoundingClientRect();
+      var x = r.left + r.width / 2, y = r.top + r.height / 2;
+      var dx = x - ax, dy = y - ay;
+      var ok = dir === 'izq' ? dx < -5 : dir === 'der' ? dx > 5 : dir === 'arr' ? dy < -5 : dy > 5;
+      if (!ok) return;
+      var principal = (dir === 'izq' || dir === 'der') ? Math.abs(dx) : Math.abs(dy);
+      var lateral = (dir === 'izq' || dir === 'der') ? Math.abs(dy) : Math.abs(dx);
+      var d = principal + lateral * 2;
+      if (d < mejorD) { mejorD = d; mejor = el; }
+    });
+    if (mejor) mejor.focus();
+  }
+
+  function volver() {
+    if (pantalla === 'clima') return mostrar('extras', 'card-clima');
+    if (pantalla === 'extras') return mostrar('inicio', 'btn-extras');
+  }
+
+  // ── Teclado / control remoto ──────────────────────────────────────────────
+  var TECLAS = { ArrowLeft: 'izq', ArrowRight: 'der', ArrowUp: 'arr', ArrowDown: 'aba', Left: 'izq', Right: 'der', Up: 'arr', Down: 'aba' };
+  var CODIGOS = { 37: 'izq', 39: 'der', 38: 'arr', 40: 'aba' };
+  document.addEventListener('keydown', function (e) {
+    ultimaActividad = Date.now();
+    if (ambientActivo) { e.preventDefault(); e.stopPropagation(); salirAmbient(); return; } // la tecla solo despierta
+    if (pantalla === 'vencido') return;
+    var dir = TECLAS[e.key] || CODIGOS[e.keyCode];
+    var enCodigo = document.activeElement === $('codigo');
+    if (dir) {
+      if (enCodigo && (dir === 'izq' || dir === 'der')) return; // mover el cursor dentro del código
+      e.preventDefault(); mover(dir); return;
+    }
+    if (e.key === 'Escape' || e.key === 'BrowserBack' || e.key === 'GoBack' || (e.key === 'Backspace' && !enCodigo)) {
+      if (pantalla === 'extras' || pantalla === 'clima') { e.preventDefault(); volver(); }
+      return;
+    }
+    if (enCodigo && (e.key === 'Enter' || e.keyCode === 13)) { e.preventDefault(); activar(); }
+  }, true);
+  ['click', 'mousemove', 'touchstart'].forEach(function (ev) {
+    document.addEventListener(ev, function () { ultimaActividad = Date.now(); if (ambientActivo) salirAmbient(); }, true);
   });
 
-  render();
-  setInterval(render, 15000);
+  // ── Textos en pantalla ────────────────────────────────────────────────────
+  function pintarTextos() {
+    var x = t();
+    document.documentElement.lang = idioma;
+    $('idioma-txt').textContent = x.chip;
+    $('t-vertv').textContent = x.vertv; $('t-apps').textContent = x.apps; $('t-extras').textContent = x.extras; $('t-ajustes').textContent = x.ajustes;
+    $('t-extras-sub').textContent = x.extras; $('t-clima').textContent = x.clima; $('t-despertador').textContent = x.despertador;
+    $('desp-detalle').textContent = x.despProx;
+    Array.prototype.forEach.call(document.querySelectorAll('.t-inicio'), function (el) { el.textContent = x.inicio; });
+    Array.prototype.forEach.call(document.querySelectorAll('.t-extras-may'), function (el) { el.textContent = x.extrasMay; });
+    Array.prototype.forEach.call(document.querySelectorAll('.t-ok'), function (el) { el.textContent = x.ok; });
+    Array.prototype.forEach.call(document.querySelectorAll('.t-navegar'), function (el) { el.textContent = x.navegar; });
+    Array.prototype.forEach.call(document.querySelectorAll('.t-abrir'), function (el) { el.textContent = x.abrir; });
+    Array.prototype.forEach.call(document.querySelectorAll('.t-volver'), function (el) { el.textContent = x.volver; });
+    $('act-titulo').textContent = x.bienvenido; $('act-instruccion').textContent = x.instruccion;
+    $('btn-activar').textContent = x.activar; $('listo-titulo').textContent = x.listo; $('listo-texto').textContent = x.listoTexto;
+    reloj(); pintarClima();
+  }
+  function reloj() {
+    var d = new Date(), x = t();
+    $('saludo').textContent = x.saludo(d.getHours());
+    $('hora').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    $('fecha').textContent = x.fecha(d, x);
+    Array.prototype.forEach.call(document.querySelectorAll('.hora-lado'), function (el) { el.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()); });
+    if (ambientActivo) hud();
+  }
+  setInterval(reloj, 10000);
 
-  // ---- Botón Ver TV ----
-  // La apk nativa (WebViewClient.shouldOverrideUrlLoading) intercepta este
-  // esquema y lanza com.iptv.blackeye. En un navegador normal no hace nada.
-  document.getElementById('ver-tv-btn').addEventListener('click', function () {
-    window.location.href = 'vizionstv://launch-blackeye';
-  });
+  $('idioma').addEventListener('click', function () { idioma = idioma === 'es' ? 'en' : 'es'; guardar(CLAVES.idioma, idioma); pintarTextos(); });
 
-  // ---- Botón Apps ----
-  // La apk intercepta este esquema y muestra su pantalla Apps (apps instaladas).
-  document.getElementById('apps-btn').addEventListener('click', function () {
-    window.location.href = 'vizionstv://open-apps?lang=' + lang;
-  });
+  // ── Clima ─────────────────────────────────────────────────────────────────
+  function grados(c) {
+    if (c === null || c === undefined) return '';
+    var v = cfg && cfg.clima && cfg.clima.unidad === 'F' ? c * 9 / 5 + 32 : c;
+    return Math.round(v) + '°';
+  }
+  function ciudad() { return (cfg && cfg.clima && cfg.clima.ciudad) ? String(cfg.clima.ciudad).split(',')[0] : ''; }
+  function pintarClima() {
+    var mini = $('clima-mini');
+    if (!clima || !clima.ahora) { mini.classList.add('oculto'); $('clima-detalle').textContent = t().pronostico; return; }
+    var a = clima.ahora;
+    mini.innerHTML = svgIc(icono(a.codigo, a.es_de_dia)) + '<span>' + esc(grados(a.temp)) + '</span>' +
+      (ciudad() ? '<span class="punto">·</span><span class="ciudad">' + esc(ciudad()) + '</span>' : '');
+    mini.classList.remove('oculto');
+    $('clima-detalle').textContent = grados(a.temp) + t().ahora;
+    if (pantalla === 'clima') pintarClimaDetalle();
+  }
+  function pintarClimaDetalle() {
+    var x = t(), cuerpo = $('clima-cuerpo');
+    if (!clima || !clima.ahora) { cuerpo.innerHTML = '<div class="titulo-lado"><div class="grande">' + esc(x.clima) + '</div><div class="sub sin-dato" style="margin-top:30px;text-transform:none;letter-spacing:0">' + esc(x.sinClima) + '</div></div>'; return; }
+    var a = clima.ahora;
+    var desc = x.desc[a.codigo] || '';
+    var h = '<div id="clima-ahora"><div class="temp">' + esc(grados(a.temp)) + '</div>' +
+      '<div class="desc">' + esc(desc) + '</div>' + (ciudad() ? '<div class="ciudad">' + esc(ciudad()) + '</div>' : '') +
+      '<div class="datos"><div>' + esc(x.sensacion) + ' ' + esc(grados(a.sensacion)) + '</div>' +
+      '<div>' + esc(x.humedad) + ' ' + esc(Math.round(a.humedad)) + '%</div>' +
+      '<div>' + esc(x.viento) + ' ' + esc(Math.round(a.viento)) + ' km/h</div></div></div>' +
+      '<div id="clima-icono">' + svgIc(icono(a.codigo, a.es_de_dia), 'width="200" height="200"') + '</div><div id="dias">';
+    (clima.dias || []).slice(0, 5).forEach(function (d, i) {
+      var f = new Date(d.fecha + 'T12:00:00');
+      h += '<div class="dia vidrio" style="left:' + (i * 204) + 'px"><div class="nombre-dia">' + esc(i === 0 ? x.hoy : x.diasCortos[f.getDay()]) + '</div>' +
+        svgIc(icono(d.codigo, true)) + '<div class="max">' + esc(grados(d.max)) + '</div><div class="min">' + esc(grados(d.min)) + '</div>' +
+        (d.lluvia !== null && d.lluvia !== undefined ? '<div class="lluvia">' + esc(d.lluvia) + '% ' + esc(x.lluvia) + '</div>' : '') + '</div>';
+    });
+    cuerpo.innerHTML = h + '</div>';
+  }
+  function cargarClima() {
+    if (!leer(CLAVES.caja)) return;
+    pedir('GET', '/api/caja/clima').then(function (j) { if (j.ok && j.clima) { clima = j.clima; pintarClima(); } }).catch(function () {});
+  }
+  setInterval(cargarClima, CADA_CLIMA_MS);
 
-  // ---- Botón Ajustes ----
-  // La apk intercepta este esquema y abre los Ajustes completos de Android
-  // (lo mismo que el escape de 5x BACK).
-  document.getElementById('settings-btn').addEventListener('click', function () {
-    window.location.href = 'vizionstv://open-settings';
+  // ── Fondo ─────────────────────────────────────────────────────────────────
+  var fondoActual = null;
+  function pintarFondo() {
+    var f = cfg && cfg.fondo && cfg.fondo.url ? cfg.fondo : null;
+    var clave = f ? f.url : '';
+    if (clave === fondoActual) return;
+    fondoActual = clave;
+    var m = $('fondo-medio');
+    m.innerHTML = ''; m.style.backgroundImage = '';
+    if (!f) { m.classList.add('oculto'); $('fondo-velo').classList.add('oculto'); $('fondo-glass').classList.remove('oculto'); return; }
+    if (/^video\//.test(f.mime || '')) {
+      var v = document.createElement('video');
+      v.muted = true; v.loop = true; v.autoplay = true; v.setAttribute('playsinline', ''); v.src = f.url;
+      m.appendChild(v);
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    } else {
+      m.style.backgroundImage = 'url("' + f.url.replace(/"/g, '%22') + '")';
+    }
+    m.classList.remove('oculto'); $('fondo-velo').classList.remove('oculto'); $('fondo-glass').classList.add('oculto');
+  }
+
+  // ── Botones de inicio ─────────────────────────────────────────────────────
+  function app() { return cfg && cfg.app && cfg.app.paquete ? cfg.app : { nombre: 'BlackEye', paquete: BLACKEYE }; }
+  $('btn-vertv').addEventListener('click', function () {
+    var a = app();
+    var lista = appsInstaladas();
+    if (lista && lista.indexOf(a.paquete) < 0) { avisar(t().noApp(a.nombre), t().noAppTexto); return; }
+    // BlackEye se abre por su enlace propio (necesita CLEAR_TASK, ver bug de HOME en TVLite).
+    nativo(a.paquete === BLACKEYE ? 'vizionstv://launch-blackeye' : 'vizionstv://launch-app?pkg=' + encodeURIComponent(a.paquete));
   });
+  $('btn-apps').addEventListener('click', function () { nativo('vizionstv://open-apps?lang=' + idioma); });
+  $('btn-ajustes').addEventListener('click', function () { nativo('vizionstv://open-settings'); });
+  $('btn-extras').addEventListener('click', function () { mostrar('extras', 'card-clima'); });
+  $('card-clima').addEventListener('click', function () { mostrar('clima'); pintarClimaDetalle(); var b = $('p-clima').querySelector('[data-volver]'); if (b) b.focus(); if (!clima) cargarClima(); });
+  $('card-despertador').addEventListener('click', function () { avisar(t().despTitulo, t().despTexto); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-volver]'), function (b) { b.addEventListener('click', volver); });
+
+  var avisoT = null;
+  function avisar(titulo, texto) {
+    $('aviso-titulo').textContent = titulo; $('aviso-texto').textContent = texto;
+    $('aviso').classList.remove('oculto');
+    clearTimeout(avisoT); avisoT = setTimeout(ocultarAviso, 5000);
+  }
+  function ocultarAviso() { $('aviso').classList.add('oculto'); }
+
+  // ── Activación ────────────────────────────────────────────────────────────
+  var codigo = $('codigo');
+  codigo.addEventListener('input', function () {
+    var d = codigo.value.replace(/\D/g, '').slice(0, 8);
+    var v = d.length > 4 ? d.slice(0, 4) + ' ' + d.slice(4) : d;
+    if (codigo.value !== v) codigo.value = v;
+    codigo.classList.remove('mal'); $('act-error').textContent = '';
+  });
+  $('btn-activar').addEventListener('click', activar);
+  var activando = false;
+  function activar() {
+    if (activando) return;
+    var d = codigo.value.replace(/\D/g, '');
+    if (d.length !== 8) { codigo.classList.add('mal'); $('act-error').textContent = t().ocho; codigo.focus(); return; }
+    activando = true; $('btn-activar').disabled = true; $('btn-activar').textContent = t().activando;
+    pedir('POST', '/api/caja/activar', { token: d, device_id: dispositivo(), version: 'web' }).then(function (j) {
+      if (j._status === 201 && j.caja) {
+        guardar(CLAVES.caja, j.caja);
+        $('act-paso1').classList.add('oculto'); $('act-paso2').classList.remove('oculto');
+        setTimeout(function () { cargarConfig(true); cargarClima(); }, 2500);
+      } else {
+        codigo.classList.add('mal'); $('act-error').textContent = j.error || t().sinRed; codigo.focus();
+      }
+    }).catch(function () {
+      $('act-error').textContent = t().sinRed;
+    }).then(function () {
+      activando = false; $('btn-activar').disabled = false; $('btn-activar').textContent = t().activar;
+    });
+  }
+  function pedirCodigo(mensaje) {
+    guardar(CLAVES.caja, null); guardar(CLAVES.config, null); cfg = null; clima = null;
+    $('act-paso1').classList.remove('oculto'); $('act-paso2').classList.add('oculto');
+    codigo.value = ''; codigo.classList.remove('mal'); $('act-error').textContent = mensaje || '';
+    pintarFondo();
+    mostrar('activar');
+  }
+
+  // ── Configuración de la cuenta ────────────────────────────────────────────
+  function aplicar(nueva, primera) {
+    var antes = cfg;
+    cfg = nueva;
+    guardar(CLAVES.config, JSON.stringify(nueva));
+    if (nueva.vencido) { mostrar('vencido'); return; }
+    pintarFondo(); pintarClima();
+    if (primera || pantalla === 'vencido' || pantalla === 'activar' || pantalla === null) mostrar('inicio');
+    // Lista nueva de wallpapers: se toma en el siguiente cambio de foto, desde el principio.
+    if (!antes || JSON.stringify(antes.wallpapers || []) !== JSON.stringify(nueva.wallpapers || [])) { listaAmbient = null; idxAmbient = -1; }
+  }
+  function cargarConfig(primera) {
+    if (!leer(CLAVES.caja)) { pedirCodigo(); return; }
+    pedir('GET', '/api/caja/config').then(function (j) {
+      if (j._status === 401) return pedirCodigo();
+      if (j._status === 410) return pedirCodigo(t().baja);
+      if (j.ok) aplicar(j, primera);
+      else if (primera && cfg) aplicar(cfg, true);
+    }).catch(function () {
+      // Sin servidor: se queda con lo último que tenía (o la pantalla de inicio por defecto).
+      if (primera) { if (cfg) aplicar(cfg, true); else mostrar('inicio'); }
+    });
+  }
+  setInterval(function () { if (leer(CLAVES.caja)) cargarConfig(false); }, CADA_CONFIG_MS);
+
+  // ── Wallpaper (Ambient): mismo diseño que hospitality ─────────────────────
+  var ambientActivo = false, listaAmbient = null, idxAmbient = -1, capaAmbient = 'abm-a', abmTimer = null, videosBloqueados = false;
+  function minutosAmbient() { return Math.max(1, Number(cfg && cfg.ambient_minutos) || 5); }
+  function itemsAmbient() {
+    var ws = (cfg && cfg.wallpapers) || [];
+    return ws.filter(function (w) { return w.url && (w.tipo === 'foto' || !videosBloqueados); });
+  }
+  function revisarInactividad() {
+    if (ambientActivo || pantalla !== 'inicio' || document.hidden) return;
+    if (Date.now() - ultimaActividad < minutosAmbient() * 60000) return;
+    if (!itemsAmbient().length) return;
+    entrarAmbient();
+  }
+  setInterval(revisarInactividad, 15000);
+  function entrarAmbient() {
+    ambientActivo = true; idxAmbient = -1; listaAmbient = null;
+    $('ambient').classList.remove('oculto');
+    hud();
+    if (!clima) cargarClima();
+    siguienteAmbient();
+  }
+  function salirAmbient() {
+    if (!ambientActivo) return;
+    ambientActivo = false; clearTimeout(abmTimer);
+    ['abm-a', 'abm-b'].forEach(function (id) { soltarVideos($(id)); $(id).innerHTML = ''; $(id).classList.remove('visible'); });
+    $('ambient').classList.add('oculto');
+    ultimaActividad = Date.now();
+  }
+  function soltarVideos(el) {
+    // En cajas modestas un video oculto sigue decodificando: se suelta.
+    Array.prototype.forEach.call(el.querySelectorAll('video'), function (v) { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) {} });
+  }
+  function siguienteAmbient() {
+    if (!ambientActivo) return;
+    clearTimeout(abmTimer);
+    if (!listaAmbient) listaAmbient = itemsAmbient();
+    if (!listaAmbient.length) { salirAmbient(); return; }
+    var unico = listaAmbient.length === 1;
+    if (unico && idxAmbient === 0) return; // con un solo elemento no se repinta (evita parpadeo)
+    idxAmbient = (idxAmbient + 1) % listaAmbient.length;
+    var item = listaAmbient[idxAmbient];
+    var vieja = $(capaAmbient);
+    capaAmbient = capaAmbient === 'abm-a' ? 'abm-b' : 'abm-a';
+    var capa = $(capaAmbient);
+    soltarVideos(capa); capa.innerHTML = '';
+    if (item.tipo === 'video') {
+      var v = document.createElement('video');
+      v.className = 'abm-vid'; v.muted = true; v.autoplay = true; v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+      if (unico) v.loop = true;
+      v.src = item.url;
+      v.onended = function () { siguienteAmbient(); };
+      v.onerror = function () { abmTimer = setTimeout(siguienteAmbient, 4000); };
+      capa.appendChild(v);
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {
+        // Esta caja no deja arrancar videos solos: se usan solo las fotos (el APK v2 lo arregla).
+        videosBloqueados = true; listaAmbient = null; idxAmbient = -1; abmTimer = setTimeout(siguienteAmbient, 300);
+      });
+      if (!unico) abmTimer = setTimeout(siguienteAmbient, 180000);
+    } else {
+      var ph = document.createElement('div');
+      ph.className = 'abm-ph';
+      ph.style.backgroundImage = 'url("' + String(item.url).replace(/"/g, '%22') + '")';
+      if (item.image_pos) ph.style.backgroundPosition = item.image_pos.split(',').map(function (n) { return Number(n) + '%'; }).join(' ');
+      capa.appendChild(ph);
+      if (!unico) abmTimer = setTimeout(siguienteAmbient, 12000);
+    }
+    capa.classList.add('visible');
+    vieja.classList.remove('visible');
+    setTimeout(function () { if (!vieja.classList.contains('visible')) { soltarVideos(vieja); vieja.innerHTML = ''; } }, 1000);
+  }
+  function hud() {
+    var d = new Date(), x = t();
+    $('abm-hora').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    // «Sábado, 17 de octubre» / «Saturday, October 17»: solo mayúscula inicial (y meses en inglés).
+    var f = x.fecha(d, x).toLowerCase();
+    f = idioma === 'en' ? f.replace(/(^|\s)[a-z]/g, function (s) { return s.toUpperCase(); }) : f.charAt(0).toUpperCase() + f.slice(1);
+    var linea = '<span>' + esc(f) + '</span>';
+    if (clima && clima.ahora) linea += svgIc(icono(clima.ahora.codigo, clima.ahora.es_de_dia)) + '<span>' + esc(grados(clima.ahora.temp)) + '</span>';
+    $('abm-linea').innerHTML = linea;
+  }
+  document.addEventListener('visibilitychange', function () { if (document.hidden) salirAmbient(); else ultimaActividad = Date.now(); });
+
+  // ── Cajas con el APK viejo (antes del botón Apps) ─────────────────────────
+  // No tienen el puente TVLite. Mientras se les instala el APK nuevo siguen como
+  // siempre, sin pedir código: saludo, hora, Ver TV (BlackEye) y Ajustes.
+  function esApkViejo() { return !window.TVLite && !leer(CLAVES.caja); }
+  function modoViejo() {
+    $('btn-apps').classList.add('oculto');
+    $('btn-extras').classList.add('oculto');
+    mostrar('inicio');
+  }
+
+  // ── Arranque ──────────────────────────────────────────────────────────────
+  pintarTextos();
+  if (esApkViejo()) {
+    modoViejo();
+  } else if (leer(CLAVES.caja)) {
+    if (cfg) aplicar(cfg, true); // pinta al instante con lo guardado; luego se actualiza
+    cargarConfig(!cfg);
+    cargarClima();
+  } else {
+    pedirCodigo();
+  }
+
+  // Para el banco de pruebas y la vista previa del panel (sin efecto en la caja).
+  window.__lite = { estado: function () { return { pantalla: pantalla, ambient: ambientActivo, videosBloqueados: videosBloqueados, idx: idxAmbient, lista: listaAmbient ? listaAmbient.length : null }; }, ambientYa: function () { ultimaActividad = 0; revisarInactividad(); } };
 })();
 </script>
 </body>
