@@ -270,7 +270,7 @@
   var CADA_CLIMA_MS = 15 * 60 * 1000;
   var CLAVES = { caja: 'lite.caja', disp: 'lite.dispositivo', config: 'lite.config', idioma: 'lite.idioma' };
 
-  function guardar(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } }
+  function guardar(k, v) { if (/[?&]vista=panel(&|$)/.test(window.location.search) && k !== 'lite.idioma') return; try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } }
   function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function $(id) { return document.getElementById(id); }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -363,8 +363,13 @@
   try { cfg = JSON.parse(leer(CLAVES.config) || 'null'); } catch (e) { cfg = null; }
 
   // ── Llamadas a la caja nativa (TVLite) ────────────────────────────────────
+  // Vista previa dentro del panel (iframe con ?vista=panel): no se activa, no guarda nada
+  // y no llama al servidor; pinta la configuración que le manda el panel por postMessage.
+  var VISTA = /[?&]vista=panel(&|$)/.test(window.location.search);
+  var ORIGENES_PANEL = ['https://lite.vizionsnetworks.com'].concat(window.LITE_PANEL_ORIGEN ? [window.LITE_PANEL_ORIGEN] : []);
   function nativo(url) {
     if (typeof window.__bancoNativo === 'function') { window.__bancoNativo(url); return; } // solo el banco de pruebas
+    if (VISTA) { avisoVista(url); return; }
     window.location.href = url;
   }
   var appsCache = null, appsCacheT = 0;
@@ -539,7 +544,7 @@
     cuerpo.innerHTML = h + '</div>';
   }
   function cargarClima() {
-    if (!leer(CLAVES.caja)) return;
+    if (VISTA || !leer(CLAVES.caja)) return;
     pedir('GET', '/api/caja/clima').then(function (j) { if (j.ok && j.clima) { clima = j.clima; pintarClima(); } }).catch(function () {});
   }
   setInterval(cargarClima, CADA_CLIMA_MS);
@@ -627,8 +632,15 @@
   }
 
   // ── Configuración de la cuenta ────────────────────────────────────────────
+  var refrescarVisto = null;
   function aplicar(nueva, primera) {
     var antes = cfg;
+    // «Refrescar pantallas» del panel: si el contador cambió, recarga la página entera.
+    // La primera configuración de cada carga solo aprende el contador (así no hay bucle).
+    if (!VISTA && typeof nueva.refrescar === 'number') {
+      if (refrescarVisto !== null && nueva.refrescar !== refrescarVisto) { guardar(CLAVES.config, JSON.stringify(nueva)); window.location.reload(); return; }
+      refrescarVisto = nueva.refrescar;
+    }
     cfg = nueva;
     guardar(CLAVES.config, JSON.stringify(nueva));
     if (nueva.vencido) { mostrar('vencido'); return; }
@@ -649,7 +661,7 @@
       if (primera) { if (cfg) aplicar(cfg, true); else mostrar('inicio'); }
     });
   }
-  setInterval(function () { if (leer(CLAVES.caja)) cargarConfig(false); }, CADA_CONFIG_MS);
+  setInterval(function () { if (!VISTA && leer(CLAVES.caja)) cargarConfig(false); }, CADA_CONFIG_MS);
 
   // ── Wallpaper (Ambient): mismo diseño que hospitality ─────────────────────
   var ambientActivo = false, listaAmbient = null, idxAmbient = -1, capaAmbient = 'abm-a', abmTimer = null, videosBloqueados = false;
@@ -659,6 +671,7 @@
     return ws.filter(function (w) { return w.url && (w.tipo === 'foto' || !videosBloqueados); });
   }
   function revisarInactividad() {
+    if (VISTA) return; // en la vista previa el wallpaper se pide con su botón
     if (ambientActivo || pantalla !== 'inicio' || document.hidden) return;
     if (Date.now() - ultimaActividad < minutosAmbient() * 60000) return;
     if (!itemsAmbient().length) return;
@@ -734,6 +747,28 @@
   }
   document.addEventListener('visibilitychange', function () { if (document.hidden) salirAmbient(); else ultimaActividad = Date.now(); });
 
+  // ── Vista previa del panel ────────────────────────────────────────────────
+  var NOMBRES_ACCION = { 'open-apps': 'la pantalla de apps', 'open-settings': 'los Ajustes de Android' };
+  function avisoVista(url) {
+    var m = /^vizionstv:\/\/([a-z-]+)/.exec(url) || [];
+    var que = m[1] === 'launch-blackeye' || m[1] === 'launch-app' ? app().nombre : (NOMBRES_ACCION[m[1]] || 'esa opción');
+    avisar('Vista previa', 'En la caja esto abre ' + que + '.');
+  }
+  function iniciarVista() {
+    clima = null;
+    mostrar('inicio');
+    window.addEventListener('message', function (e) {
+      if (ORIGENES_PANEL.indexOf(e.origin) < 0 || !e.data || e.data.tipo !== 'lite-vista') return;
+      cfg = e.data.cfg || {};
+      clima = e.data.clima || null;
+      if (e.data.idioma === 'en' || e.data.idioma === 'es') idioma = e.data.idioma;
+      pintarFondo(); pintarTextos();
+      if (pantalla !== 'extras' && pantalla !== 'clima') mostrar('inicio');
+      if (e.data.ambient) entrarAmbient(); else salirAmbient();
+    });
+    if (window.parent !== window) window.parent.postMessage({ tipo: 'lite-lista' }, '*'); // el panel contesta con la configuración
+  }
+
   // ── Cajas con el APK viejo (antes del botón Apps) ─────────────────────────
   // No tienen el puente TVLite. Mientras se les instala el APK nuevo siguen como
   // siempre, sin pedir código: saludo, hora, Ver TV (BlackEye) y Ajustes.
@@ -746,7 +781,9 @@
 
   // ── Arranque ──────────────────────────────────────────────────────────────
   pintarTextos();
-  if (esApkViejo()) {
+  if (VISTA) {
+    iniciarVista();
+  } else if (esApkViejo()) {
     modoViejo();
   } else if (leer(CLAVES.caja)) {
     if (cfg) aplicar(cfg, true); // pinta al instante con lo guardado; luego se actualiza
