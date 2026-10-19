@@ -137,6 +137,51 @@
   #abm-linea { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: end; justify-content: flex-end; font-size: 20px; margin-top: 11px; }
   #abm-linea svg { width: 27px; height: 27px; margin: 0 9px 0 21px; }
 
+  /* ── Despertador ─────────────────────────── (hospitality 8.25, medidas pasadas a px de 1920×1080) */
+  #desp-caja { position: absolute; left: 600px; top: 150px; width: 1200px; height: 790px; box-sizing: border-box; border-radius: 34px; padding: 52px 64px; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; box-shadow: 0 30px 70px rgba(0,0,0,0.35); }
+  #desp-caja.col { -webkit-box-orient: vertical; flex-direction: column; -webkit-box-align: stretch; align-items: stretch; -webkit-box-pack: start; justify-content: flex-start; padding: 56px 64px; }
+  #desp-caja.col > * + * { margin-top: 30px; }
+  .d-ojo { font-size: 18px; letter-spacing: 0.3em; font-weight: 800; color: var(--accent-claro); text-transform: uppercase; }
+  .d-dial { position: relative; -webkit-flex-shrink: 0; flex-shrink: 0; width: 520px; height: 520px; box-sizing: border-box; border-radius: 50%; background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.22); margin-right: 56px; }
+  .d-dial svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .d-n { position: absolute; width: 10%; height: 10%; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; font-size: 28px; font-weight: 300; }
+  .d-n.on { color: #062A24; font-weight: 700; font-size: 32px; }
+  .d-col { -webkit-box-flex: 1; flex: 1 1 0; min-width: 0; display: -webkit-box; display: flex; -webkit-box-orient: vertical; flex-direction: column; }
+  .d-col > * + * { margin-top: 34px; }
+  .d-tiempo { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; }
+  .d-num { box-sizing: border-box; padding: 6px 22px; border-radius: 24px; border: 1.5px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); font-size: 96px; font-weight: 300; line-height: 1.1; }
+  .d-num.act { border: 3px solid var(--accent); background: rgba(45,212,191,0.14); }
+  .d-dos { font-size: 88px; font-weight: 300; opacity: 0.7; line-height: 1; margin: 0 14px; }
+  .d-ampm { margin-left: 28px; }
+  .d-ap { width: 84px; height: 52px; box-sizing: border-box; border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; font-size: 22px; opacity: 0.65; }
+  .d-ap + .d-ap { margin-top: 8px; }
+  .d-ap.on { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.5); font-weight: 800; opacity: 1; }
+  .d-ayuda { font-size: 22px; opacity: 0.8; line-height: 1.5; }
+  .d-paso { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; font-size: 20px; opacity: 0.85; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .d-pn { display: inline-block; width: 40px; height: 40px; line-height: 40px; text-align: center; border-radius: 50%; background: var(--accent); color: #062A24; font-weight: 800; margin: 0 14px; }
+  .d-de { opacity: 0.6; }
+  .d-btn { height: 84px; box-sizing: border-box; border-radius: 24px; background: #F5F7F5; color: #111; display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; font-size: 26px; font-weight: 800; }
+  .d-btn svg { width: 32px; height: 32px; margin-right: 14px; }
+  .d-btn.sec { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.3); color: #F5F7F5; font-weight: 700; }
+  .d-btn.foco, .d-dia.foco, .d-una.foco { box-shadow: 0 0 0 4px #0c130f, 0 0 0 9px #FFC83D; }
+  .d-hora { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; }
+  .d-hora svg { width: 60px; height: 60px; color: var(--accent-claro); margin-right: 22px; }
+  .d-hora-t { font-size: 104px; font-weight: 300; line-height: 1; }
+  .d-hora-ap { font-size: 34px; font-weight: 700; opacity: 0.8; -webkit-align-self: flex-end; align-self: flex-end; padding-bottom: 12px; margin-left: 22px; }
+  .d-una { height: 84px; box-sizing: border-box; border-radius: 22px; border: 1.5px solid rgba(255,255,255,0.28); background: rgba(255,255,255,0.06); display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; padding: 0 30px; font-size: 26px; color: rgba(255,255,255,0.85); }
+  .d-radio { -webkit-flex-shrink: 0; flex-shrink: 0; width: 30px; height: 30px; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(255,255,255,0.55); margin-right: 16px; }
+  .d-una.on .d-radio { border: 9px solid var(--accent); }
+  .d-una-n { margin-left: auto; font-size: 19px; opacity: 0.6; }
+  .d-dias { display: -webkit-box; display: flex; margin-top: 16px; }
+  .d-dia { width: 118px; height: 96px; box-sizing: border-box; border-radius: 22px; display: -webkit-box; display: flex; -webkit-box-orient: vertical; flex-direction: column; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; font-size: 26px; font-weight: 700; letter-spacing: 0.04em; border: 1.5px solid rgba(255,255,255,0.28); background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .d-dia + .d-dia { margin-left: 14px; }
+  .d-dia.on { background: var(--accent); border-color: var(--accent); color: #062A24; }
+  .d-res { border-radius: 20px; background: rgba(45,212,191,0.10); border: 1px solid rgba(45,212,191,0.4); padding: 20px 28px; font-size: 23px; line-height: 1.5; }
+  .d-res span { opacity: 0.78; }
+  .d-res.err { background: rgba(224,90,70,0.14); border-color: rgba(224,90,70,0.5); }
+  .d-pie { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; margin-top: auto !important; }
+  .d-pie .d-btn { -webkit-box-flex: 1; flex: 1 1 0; margin-left: 28px; }
+
   #negro { background: #000; z-index: 40; }
 </style>
 </head>
@@ -243,6 +288,18 @@
     <div id="clima-cuerpo"></div>
   </section>
 
+  <!-- Despertador (APK v2): hora → minutos → días. La alarma vive en la caja. -->
+  <section id="p-despertador" class="pantalla oculto">
+    <div class="lleno velo-oscuro"></div>
+    <button class="pastilla-volver" type="button" data-volver>
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+      <span class="t-extras-may">EXTRAS</span>
+    </button>
+    <div class="titulo-lado"><div class="grande hora-lado">--:--</div><div class="sub" id="desp-fecha"></div></div>
+    <div id="desp-caja" class="vidrio"></div>
+    <div class="teclas" id="desp-teclas"></div>
+  </section>
+
   <!-- Wallpaper -->
   <div id="ambient" class="lleno oculto" aria-hidden="true">
     <div class="abm-capa" id="abm-a"></div>
@@ -298,6 +355,30 @@
       pronostico: 'Pronóstico de 5 días', ahora: ' ahora · Pronóstico de 5 días',
       despProx: 'Llega con la próxima actualización de tu caja',
       despTitulo: 'El despertador todavía no está disponible', despTexto: 'Llega con la próxima actualización de tu caja.',
+      despLibre: 'Programa una alarma', despActivo: 'Activo',
+      d: {
+        ojoHora: 'DESPERTADOR · ¿A QUÉ HORA?', ojoMin: 'DESPERTADOR · ¿Y LOS MINUTOS?', ojoDias: 'DESPERTADOR · ¿QUÉ DÍAS?', ojoListo: 'DESPERTADOR ACTIVADO',
+        ayudaHora: 'Gira el dial con ◀ ▶ y elige la hora. Luego te pido los minutos y los días.',
+        ayudaMin: '◀ ▶ mueve de 1 en 1 minuto, ▲ ▼ de 5 en 5.',
+        paso: 'Paso', de3: 'de 3', sigMin: 'Siguiente: minutos', sigDias: 'Siguiente: días',
+        activar: 'Activar despertador', quitar: 'Quitar despertador', listo: 'Listo',
+        unaVez: 'Solo una vez', unaVezN: 'suena una vez y se borra',
+        girar: 'Girar el dial', siguiente: 'Siguiente', mas1: '±1 min', mas5: '±5 min', volverHora: 'Volver a la hora',
+        moverDias: 'Moverse entre días', marcar: 'Marcar / desmarcar', arribaAbajo: 'Solo una vez / Activar', volverMin: 'Volver a los minutos',
+        error: 'No se pudo activar el despertador. Intenta de nuevo.',
+        corto: ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'],
+        largo: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
+        plural: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábados', 'domingos'],
+        meses: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+        hoy: 'hoy', manana: 'mañana', y: ' y ',
+        alas: function (h12) { return h12 === 1 ? 'a la ' : 'a las '; },
+        unaA: function (cuando, hora) { return 'Sonará <b>' + cuando + '</b> ' + hora + '.'; },
+        unaB: 'Suena una vez y se borra sola.',
+        todos: 'todos los días', semana: 'de lunes a viernes', finde: 'sábados y domingos',
+        repA: function (dias, hora) { return 'Sonará <b>' + dias + '</b> ' + hora + '.'; },
+        repLos: function (lista) { return 'los ' + lista; },
+        repB: function (prox) { return 'Próxima: ' + prox + '. Se repite cada semana hasta que lo quites.'; }
+      },
       noApp: function (n) { return 'No se pudo abrir ' + n; }, noAppTexto: 'La app no está instalada en esta caja.',
       bienvenido: 'Bienvenido', instruccion: 'Escribe el código de activación de 8 números que te dieron con tu caja.',
       activar: 'Activar', activando: 'Activando…', listo: '¡Listo!', listoTexto: 'Tu caja quedó activada. En un momento aparece tu pantalla de inicio.',
@@ -317,6 +398,30 @@
       pronostico: '5-day forecast', ahora: ' now · 5-day forecast',
       despProx: 'Coming with your box’s next update',
       despTitulo: 'The alarm clock is not available yet', despTexto: 'It comes with your box’s next update.',
+      despLibre: 'Set an alarm', despActivo: 'On',
+      d: {
+        ojoHora: 'ALARM · WHAT TIME?', ojoMin: 'ALARM · AND THE MINUTES?', ojoDias: 'ALARM · WHICH DAYS?', ojoListo: 'ALARM SET',
+        ayudaHora: 'Turn the dial with ◀ ▶ and pick the hour. Then the minutes and the days.',
+        ayudaMin: '◀ ▶ moves 1 minute at a time, ▲ ▼ moves 5.',
+        paso: 'Step', de3: 'of 3', sigMin: 'Next: minutes', sigDias: 'Next: days',
+        activar: 'Set alarm', quitar: 'Remove alarm', listo: 'Done',
+        unaVez: 'Just once', unaVezN: 'rings once, then deletes itself',
+        girar: 'Turn the dial', siguiente: 'Next', mas1: '±1 min', mas5: '±5 min', volverHora: 'Back to the hour',
+        moverDias: 'Move between days', marcar: 'Select / unselect', arribaAbajo: 'Just once / Set', volverMin: 'Back to the minutes',
+        error: 'The alarm could not be set. Please try again.',
+        corto: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+        largo: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        plural: ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'],
+        meses: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        hoy: 'today', manana: 'tomorrow', y: ' and ',
+        alas: function () { return 'at '; },
+        unaA: function (cuando, hora) { return 'Rings <b>' + cuando + '</b> ' + hora + '.'; },
+        unaB: 'Rings once, then deletes itself.',
+        todos: 'every day', semana: 'Monday to Friday', finde: 'on Saturdays and Sundays',
+        repA: function (dias, hora) { return 'Rings <b>' + dias + '</b> ' + hora + '.'; },
+        repLos: function (lista) { return 'on ' + lista; },
+        repB: function (prox) { return 'Next: ' + prox + '. Repeats every week until you remove it.'; }
+      },
       noApp: function (n) { return 'Could not open ' + n; }, noAppTexto: 'The app is not installed on this box.',
       bienvenido: 'Welcome', instruccion: 'Enter the 8-digit activation code you received with your box.',
       activar: 'Activate', activando: 'Activating…', listo: 'All set!', listoTexto: 'Your box is active. Your home screen will appear in a moment.',
@@ -403,12 +508,12 @@
   }
 
   // ── Pantallas ─────────────────────────────────────────────────────────────
-  var SECCIONES = { activar: 'p-activar', inicio: 'p-inicio', extras: 'p-extras', clima: 'p-clima' };
+  var SECCIONES = { activar: 'p-activar', inicio: 'p-inicio', extras: 'p-extras', clima: 'p-clima', despertador: 'p-despertador' };
   function mostrar(nombre, focoId) {
     pantalla = nombre;
     Object.keys(SECCIONES).forEach(function (k) { $(SECCIONES[k]).classList.toggle('oculto', k !== nombre); });
     $('negro').classList.toggle('oculto', nombre !== 'vencido');
-    if (nombre !== 'inicio') salirAmbient();
+    salirAmbient();
     ocultarAviso();
     var f = focoId ? $(focoId) : primerFoco();
     if (f) f.focus();
@@ -450,6 +555,7 @@
   }
 
   function volver() {
+    if (pantalla === 'despertador') { pintarTarjetaDesp(); return mostrar('extras', 'card-despertador'); }   // el subtítulo cambia a «Activo · 7:00 AM»
     if (pantalla === 'clima') return mostrar('extras', 'card-clima');
     if (pantalla === 'extras') return mostrar('inicio', 'btn-extras');
   }
@@ -461,6 +567,7 @@
     ultimaActividad = Date.now();
     if (ambientActivo) { e.preventDefault(); e.stopPropagation(); salirAmbient(); return; } // la tecla solo despierta
     if (pantalla === 'vencido') return;
+    if (pantalla === 'despertador') { despTecla(e); return; }
     var dir = TECLAS[e.key] || CODIGOS[e.keyCode];
     var enCodigo = document.activeElement === $('codigo');
     if (dir) {
@@ -484,7 +591,7 @@
     $('idioma-txt').textContent = x.chip;
     $('t-vertv').textContent = x.vertv; $('t-apps').textContent = x.apps; $('t-extras').textContent = x.extras; $('t-ajustes').textContent = x.ajustes;
     $('t-extras-sub').textContent = x.extras; $('t-clima').textContent = x.clima; $('t-despertador').textContent = x.despertador;
-    $('desp-detalle').textContent = x.despProx;
+    pintarTarjetaDesp();
     Array.prototype.forEach.call(document.querySelectorAll('.t-inicio'), function (el) { el.textContent = x.inicio; });
     Array.prototype.forEach.call(document.querySelectorAll('.t-extras-may'), function (el) { el.textContent = x.extrasMay; });
     Array.prototype.forEach.call(document.querySelectorAll('.t-ok'), function (el) { el.textContent = x.ok; });
@@ -494,6 +601,7 @@
     $('act-titulo').textContent = x.bienvenido; $('act-instruccion').textContent = x.instruccion;
     $('btn-activar').textContent = x.activar; $('listo-titulo').textContent = x.listo; $('listo-texto').textContent = x.listoTexto;
     reloj(); pintarClima();
+    if (pantalla === 'despertador') despPintar();
   }
   function reloj() {
     var d = new Date(), x = t();
@@ -545,7 +653,7 @@
   }
   function cargarClima() {
     if (VISTA || !leer(CLAVES.caja)) return;
-    pedir('GET', '/api/caja/clima').then(function (j) { if (j.ok && j.clima) { clima = j.clima; pintarClima(); } }).catch(function () {});
+    pedir('GET', '/api/caja/clima').then(function (j) { if (j.ok && j.clima) { clima = j.clima; pintarClima(); climaALaCaja(); } }).catch(function () {});
   }
   setInterval(cargarClima, CADA_CLIMA_MS);
 
@@ -579,11 +687,16 @@
     // BlackEye se abre por su enlace propio (necesita CLEAR_TASK, ver bug de HOME en TVLite).
     nativo(a.paquete === BLACKEYE ? 'vizionstv://launch-blackeye' : 'vizionstv://launch-app?pkg=' + encodeURIComponent(a.paquete));
   });
-  $('btn-apps').addEventListener('click', function () { nativo('vizionstv://open-apps?lang=' + idioma); });
+  // ambient = minutos para el wallpaper dentro de Apps (lo cuenta el APK v2; 0 = sin wallpapers).
+  $('btn-apps').addEventListener('click', function () { nativo('vizionstv://open-apps?lang=' + idioma + '&ambient=' + (itemsAmbient().length ? minutosAmbient() : 0)); });
   $('btn-ajustes').addEventListener('click', function () { nativo('vizionstv://open-settings'); });
-  $('btn-extras').addEventListener('click', function () { mostrar('extras', 'card-clima'); });
+  $('btn-extras').addEventListener('click', function () { pintarTarjetaDesp(); mostrar('extras', 'card-clima'); });
   $('card-clima').addEventListener('click', function () { mostrar('clima'); pintarClimaDetalle(); var b = $('p-clima').querySelector('[data-volver]'); if (b) b.focus(); if (!clima) cargarClima(); });
-  $('card-despertador').addEventListener('click', function () { avisar(t().despTitulo, t().despTexto); });
+  $('card-despertador').addEventListener('click', function () {
+    if (VISTA) { avisar('Vista previa', 'En la caja esto abre el despertador (necesita el APK v2).'); return; }
+    if (!despHay()) { avisar(t().despTitulo, t().despTexto); return; }
+    despAbrir();
+  });
   Array.prototype.forEach.call(document.querySelectorAll('[data-volver]'), function (b) { b.addEventListener('click', volver); });
 
   var avisoT = null;
@@ -633,6 +746,8 @@
 
   // ── Configuración de la cuenta ────────────────────────────────────────────
   var refrescarVisto = null;
+  var ambientAlCargar = !VISTA && /[?&]ambient=1(&|$)/.test(window.location.search);
+  if (ambientAlCargar) { try { window.history.replaceState(null, '', window.location.pathname); } catch (e) { /* sin historial */ } }
   function aplicar(nueva, primera) {
     var antes = cfg;
     // «Refrescar pantallas» del panel: si el contador cambió, recarga la página entera.
@@ -644,10 +759,12 @@
     cfg = nueva;
     guardar(CLAVES.config, JSON.stringify(nueva));
     if (nueva.vencido) { mostrar('vencido'); return; }
-    pintarFondo(); pintarClima();
+    pintarFondo(); pintarClima(); climaALaCaja();
     if (primera || pantalla === 'vencido' || pantalla === 'activar' || pantalla === null) mostrar('inicio');
     // Lista nueva de wallpapers: se toma en el siguiente cambio de foto, desde el principio.
     if (!antes || JSON.stringify(antes.wallpapers || []) !== JSON.stringify(nueva.wallpapers || [])) { listaAmbient = null; idxAmbient = -1; }
+    // El APK v2 regresó de Apps porque nadie usó el control: directo al wallpaper.
+    if (ambientAlCargar) { ambientAlCargar = false; if (pantalla === 'inicio' && itemsAmbient().length) entrarAmbient(); }
   }
   function cargarConfig(primera) {
     if (!leer(CLAVES.caja)) { pedirCodigo(); return; }
@@ -670,9 +787,11 @@
     var ws = (cfg && cfg.wallpapers) || [];
     return ws.filter(function (w) { return w.url && (w.tipo === 'foto' || !videosBloqueados); });
   }
+  var PANTALLAS_AMBIENT = ['inicio', 'extras', 'clima', 'despertador'];
   function revisarInactividad() {
     if (VISTA) return; // en la vista previa el wallpaper se pide con su botón
-    if (ambientActivo || pantalla !== 'inicio' || document.hidden) return;
+    // En el inicio y en Extras, Clima y Despertador. Nunca en la activación ni con el cliente vencido.
+    if (ambientActivo || PANTALLAS_AMBIENT.indexOf(pantalla) < 0 || document.hidden) return;
     if (Date.now() - ultimaActividad < minutosAmbient() * 60000) return;
     if (!itemsAmbient().length) return;
     entrarAmbient();
@@ -747,6 +866,214 @@
   }
   document.addEventListener('visibilitychange', function () { if (document.hidden) salirAmbient(); else ultimaActividad = Date.now(); });
 
+  // ── Despertador (APK v2) ──────────────────────────────────────────────────
+  // La alarma NO vive aquí: se programa en la caja por TVLite.despertador*, que la guarda, despierta la
+  // caja a la hora (eso enciende la TV por CEC) y pone la pantalla «Buenos días». Días: bit 0 = lunes …
+  // bit 6 = domingo; 0 = solo una vez (se borra al sonar). Con días marcados se repite cada semana.
+  var dPaso = 1, dH = 7, dM = 0, dPM = false, dDias = 0, dFoco = 7, dEstado = null, dError = '';
+  function despHay() {
+    try { return !!(window.TVLite && typeof window.TVLite.despertadorEstado === 'function' && typeof window.TVLite.despertadorProgramar === 'function'); }
+    catch (e) { return false; }
+  }
+  function despLeer() {
+    if (!despHay()) return null;
+    try { var o = JSON.parse(window.TVLite.despertadorEstado()); return (o && typeof o === 'object') ? o : null; } catch (e) { return null; }
+  }
+  function despActivo(st) { return !!(st && st.activo === true && typeof st.hora === 'number' && st.hora >= 0 && st.hora <= 23 && typeof st.minuto === 'number'); }
+  function d2(n) { return (n < 10 ? '0' : '') + n; }
+  function dH24() { return (dH % 12) + (dPM ? 12 : 0); }
+  function horaTxt(h24, m) { return ((h24 % 12) || 12) + ':' + d2(m); }
+  function amPm(h24) { return h24 >= 12 ? 'PM' : 'AM'; }
+  function pintarTarjetaDesp() {
+    var x = t(), card = $('card-despertador');
+    if (!despHay()) { card.classList.add('apagada'); $('desp-detalle').textContent = x.despProx; return; }
+    card.classList.remove('apagada');
+    var st = despLeer();
+    $('desp-detalle').textContent = despActivo(st) ? x.despActivo + ' · ' + horaTxt(st.hora, st.minuto) + ' ' + amPm(st.hora) : x.despLibre;
+  }
+  // Próxima fecha de cada día de la semana, de ahora a 7 días (la misma regla que la caja).
+  function despProximas(h24, m) {
+    var ahora = new Date(), out = {};
+    for (var d = 0; d <= 7; d++) {
+      var f = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() + d, h24, m, 0, 0);
+      if (f.getTime() > ahora.getTime()) { var b = (f.getDay() + 6) % 7; if (!(b in out)) out[b] = f; }
+    }
+    return out;
+  }
+  function despCuando(f) {
+    var x = t().d, hoy = new Date();
+    var dd = Math.round((new Date(f.getFullYear(), f.getMonth(), f.getDate()).getTime() - new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()).getTime()) / 864e5);
+    var nombre = x.largo[(f.getDay() + 6) % 7] + ' ' + f.getDate();
+    if (dd === 0) return x.hoy;
+    if (dd === 1) return x.manana + ', ' + nombre;
+    return nombre;
+  }
+  function despLista(a, y) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + y + a[a.length - 1]; }
+  // Texto del recuadro: {a: línea principal (HTML ya escapado), b: segunda línea}.
+  function despResumen(h24, m, dias) {
+    var x = t().d, prox = despProximas(h24, m), hora = x.alas((h24 % 12) || 12) + horaTxt(h24, m) + ' ' + amPm(h24);
+    if (!dias) {
+      var primera = null;
+      Object.keys(prox).forEach(function (k) { if (!primera || prox[k] < primera) primera = prox[k]; });
+      var cuando = despCuando(primera).split(',')[0];   // «hoy» / «mañana»
+      return { a: x.unaA(esc(cuando), esc(hora)), b: x.unaB };
+    }
+    var cual = dias === 127 ? x.todos : dias === 31 ? x.semana : dias === 96 ? x.finde : null;
+    if (!cual) { var nombres = []; for (var b = 0; b < 7; b++) if (dias & (1 << b)) nombres.push(x.plural[b]); cual = x.repLos(despLista(nombres, x.y)); }
+    var sig = null;
+    for (var b2 = 0; b2 < 7; b2++) if ((dias & (1 << b2)) && prox[b2] && (!sig || prox[b2] < sig)) sig = prox[b2];
+    return { a: x.repA(esc(cual), esc(hora)), b: x.repB(despCuando(sig)) };
+  }
+  function despAbrir() {
+    var st = despLeer();
+    dEstado = st;
+    if (despActivo(st)) { dPM = st.hora >= 12; dH = (st.hora % 12) || 12; dM = Math.max(0, Math.min(59, st.minuto)); dDias = (typeof st.dias === 'number') ? (st.dias & 127) : 0; }
+    else { dH = 7; dM = 0; dPM = false; dDias = 0; }   // 7:00 AM y «Solo una vez» preseleccionados
+    dPaso = 1; dFoco = 7; dError = '';
+    mostrar('despertador');
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    despPintar();
+  }
+  // BACK dentro del despertador: un paso atrás (días → minutos → hora) y luego a Extras.
+  function despAtras() {
+    if (dPaso === 2 || dPaso === 3) { dPaso--; dError = ''; despPintar(); return; }
+    volver();
+  }
+  function despActivar() {
+    dError = '';
+    try {
+      var r = JSON.parse(window.TVLite.despertadorProgramar(dH24(), dM, dDias, idioma));
+      dEstado = (r && typeof r === 'object') ? r : null;
+      if (despActivo(dEstado)) dPaso = 4; else dError = t().d.error;
+    } catch (e) { dError = t().d.error; }
+    despPintar();
+  }
+  function despQuitar() {
+    try { dEstado = JSON.parse(window.TVLite.despertadorCancelar()); } catch (e) { dEstado = null; }
+    volver();
+  }
+  function despTecla(e) {
+    var k = e.key, kc = e.keyCode;
+    var dir = TECLAS[k] || CODIGOS[kc];
+    var ok = k === 'Enter' || k === ' ' || kc === 13;
+    var atras = k === 'Escape' || k === 'Backspace' || k === 'BrowserBack' || k === 'GoBack';
+    if (!dir && !ok && !atras) return;
+    e.preventDefault(); e.stopPropagation();
+    if (atras) { despAtras(); return; }
+    if (dPaso === 1) {
+      if (dir === 'der') dH = dH === 12 ? 1 : dH + 1;
+      else if (dir === 'izq') dH = dH === 1 ? 12 : dH - 1;
+      else if (dir === 'arr' || dir === 'aba') dPM = !dPM;
+      else if (ok) dPaso = 2;
+    } else if (dPaso === 2) {
+      if (dir === 'der') dM = (dM + 1) % 60;
+      else if (dir === 'izq') dM = (dM + 59) % 60;
+      else if (dir === 'arr') dM = (dM + 5) % 60;
+      else if (dir === 'aba') dM = (dM + 55) % 60;
+      else if (ok) { dPaso = 3; dFoco = 7; }
+    } else if (dPaso === 3) {
+      var f = dFoco;
+      if (dir === 'arr') { if (f >= 7) dFoco = 0; else if (f >= 0) dFoco = -1; }
+      else if (dir === 'aba') { if (f === -1) dFoco = 0; else if (f >= 0 && f <= 6) dFoco = 7; }
+      else if (dir === 'izq') { if (f >= 1 && f <= 6) dFoco = f - 1; else if (f === 8) dFoco = 7; }
+      else if (dir === 'der') { if (f >= 0 && f <= 5) dFoco = f + 1; else if (f === 7 && despActivo(dEstado)) dFoco = 8; }
+      else if (ok) {
+        if (f === -1) dDias = 0;
+        else if (f >= 0 && f <= 6) dDias = dDias ^ (1 << f);
+        else if (f === 7) { despActivar(); return; }
+        else if (f === 8) { despQuitar(); return; }
+        dError = '';
+      }
+    } else if (dPaso === 4) {
+      if (ok) { volver(); return; }
+    }
+    despPintar();
+  }
+  var IC_CHECK = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>';
+  var IC_ALARMA = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"></circle><path d="M12 9v4l2.5 2M5 4L2 7M19 4l3 3"></path></svg>';
+  function despDial() {
+    var horas = dPaso === 1, sel = horas ? (dH % 12) : dM;
+    var rad = (horas ? sel * 30 : sel * 6) * Math.PI / 180;
+    var x = (320 + 240 * Math.sin(rad)).toFixed(1), y = (320 - 240 * Math.cos(rad)).toFixed(1), nums = '';
+    for (var i = 0; i < 12; i++) {
+      var a = i * 30 * Math.PI / 180, nx = 320 + 240 * Math.sin(a), ny = 320 - 240 * Math.cos(a);
+      var on = horas ? (i === sel) : (dM === i * 5);
+      nums += '<div class="d-n' + (on ? ' on' : '') + '" style="left:' + ((nx - 32) / 6.4).toFixed(3) + '%;top:' + ((ny - 32) / 6.4).toFixed(3) + '%">' + (horas ? (i === 0 ? 12 : i) : d2(i * 5)) + '</div>';
+    }
+    return '<div class="d-dial"><svg viewBox="0 0 640 640" aria-hidden="true">' +
+      '<line x1="320" y1="320" x2="' + x + '" y2="' + y + '" stroke="#2DD4BF" stroke-width="5" stroke-linecap="round"></line>' +
+      '<circle cx="320" cy="320" r="9" fill="#2DD4BF"></circle><circle cx="' + x + '" cy="' + y + '" r="42" fill="#2DD4BF"></circle></svg>' + nums + '</div>';
+  }
+  function despPasoHtml(n) { var x = t().d; return '<div class="d-paso">' + esc(x.paso) + '<span class="d-pn">' + n + '</span><span class="d-de">' + esc(x.de3) + '</span></div>'; }
+  function despHoraGrande() { var h = dH24(); return '<div class="d-hora">' + IC_ALARMA + '<div class="d-hora-t">' + horaTxt(h, dM) + '</div><div class="d-hora-ap">' + amPm(h) + '</div></div>'; }
+  function despResumenHtml() {
+    if (dError) return '<div class="d-res err">' + esc(dError) + '</div>';
+    var r = despResumen(dH24(), dM, dDias);
+    return '<div class="d-res">' + r.a + '<br><span>' + esc(r.b) + '</span></div>';
+  }
+  function despTeclas() {
+    var x = t().d;
+    function kb(tecla, txt, blanca) { return '<span><span class="tecla' + (blanca ? ' blanca' : '') + '">' + tecla + '</span>' + esc(txt) + '</span>'; }
+    if (dPaso === 1) return kb('◀ ▶', x.girar) + kb('▲ ▼', 'AM / PM') + kb('OK', x.siguiente, true) + kb('↩', t().volver);
+    if (dPaso === 2) return kb('◀ ▶', x.mas1) + kb('▲ ▼', x.mas5) + kb('OK', x.siguiente, true) + kb('↩', x.volverHora);
+    if (dPaso === 3) return kb('◀ ▶', x.moverDias) + kb('OK', x.marcar, true) + kb('▲ ▼', x.arribaAbajo) + kb('↩', x.volverMin);
+    return kb('OK', x.listo, true);
+  }
+  function despPintar() {
+    var x = t().d, caja = $('desp-caja'), html = '';
+    if (dPaso === 1 || dPaso === 2) {
+      var p1 = dPaso === 1;
+      caja.className = 'vidrio';
+      html = despDial() + '<div class="d-col">' +
+        '<div class="d-ojo">' + esc(p1 ? x.ojoHora : x.ojoMin) + '</div>' +
+        '<div class="d-tiempo"><div class="d-num' + (p1 ? ' act' : '') + '">' + d2(dH) + '</div><div class="d-dos">:</div><div class="d-num' + (p1 ? '' : ' act') + '">' + d2(dM) + '</div>' +
+          '<div class="d-ampm"><div class="d-ap' + (dPM ? '' : ' on') + '">AM</div><div class="d-ap' + (dPM ? ' on' : '') + '">PM</div></div></div>' +
+        '<div class="d-ayuda">' + esc(p1 ? x.ayudaHora : x.ayudaMin) + '</div>' + despPasoHtml(dPaso) +
+        '<div class="d-btn">' + esc(p1 ? x.sigMin : x.sigDias) + '</div></div>';
+    } else if (dPaso === 3) {
+      var dias = '';
+      for (var b = 0; b < 7; b++) {
+        dias += '<div class="d-dia' + ((dDias & (1 << b)) ? ' on' : '') + (dFoco === b ? ' foco' : '') + '"><span>' + x.corto[b] + '</span></div>';
+      }
+      caja.className = 'vidrio col';
+      html = '<div class="d-ojo">' + esc(x.ojoDias) + '</div>' + despHoraGrande() +
+        '<div><div class="d-una' + (dDias === 0 ? ' on' : '') + (dFoco === -1 ? ' foco' : '') + '"><span class="d-radio"></span>' + esc(x.unaVez) + '<span class="d-una-n">' + esc(x.unaVezN) + '</span></div>' +
+        '<div class="d-dias">' + dias + '</div></div>' + despResumenHtml() +
+        '<div class="d-pie">' + despPasoHtml(3) +
+          '<div class="d-btn' + (dFoco === 7 ? ' foco' : '') + '">' + IC_CHECK + esc(x.activar) + '</div>' +
+          (despActivo(dEstado) ? '<div class="d-btn sec' + (dFoco === 8 ? ' foco' : '') + '">' + esc(x.quitar) + '</div>' : '') + '</div>';
+    } else {
+      caja.className = 'vidrio col';
+      html = '<div class="d-ojo">' + esc(x.ojoListo) + '</div>' + despHoraGrande() + despResumenHtml() +
+        '<div class="d-pie"><div class="d-btn foco">' + IC_CHECK + esc(x.listo) + '</div></div>';
+    }
+    caja.innerHTML = html;
+    var hoy = new Date();
+    $('desp-fecha').textContent = x.largo[(hoy.getDay() + 6) % 7] + ' ' + hoy.getDate() + ' ' + x.meses[hoy.getMonth()];
+    $('desp-teclas').innerHTML = despTeclas();
+  }
+  // La pantalla «Buenos días» es nativa y no espera al internet: se le deja el clima de ahora, ya en °C o °F.
+  function climaALaCaja() {
+    if (VISTA || !clima || !clima.ahora || !window.TVLite || typeof window.TVLite.despertadorClima !== 'function') return;
+    var f = cfg && cfg.clima && cfg.clima.unidad === 'F';
+    function u(c) { return (c === null || c === undefined || isNaN(Number(c))) ? NaN : (f ? Number(c) * 9 / 5 + 32 : Number(c)); }
+    var max = clima.dias && clima.dias[0] ? u(clima.dias[0].max) : NaN;
+    try { window.TVLite.despertadorClima(u(clima.ahora.temp), max); } catch (e) { /* caja sin despertador */ }
+  }
+
+  // ── BACK y HOME del control (los manda el APK v2; el control no los entrega a la página) ──
+  // true = la página usó la tecla; false = ya estaba en el inicio (cuenta para el escape de 5×BACK).
+  window.__liteAtras = function () {
+    if (ambientActivo) { salirAmbient(); return true; }
+    if (pantalla === 'despertador') { despAtras(); return true; }
+    if (pantalla === 'extras' || pantalla === 'clima') { volver(); return true; }
+    return false;
+  };
+  window.__liteInicio = function () {
+    salirAmbient();
+    if (pantalla === 'extras' || pantalla === 'clima' || pantalla === 'despertador') mostrar('inicio', 'btn-vertv');
+  };
+
   // ── Vista previa del panel ────────────────────────────────────────────────
   var NOMBRES_ACCION = { 'open-apps': 'la pantalla de apps', 'open-settings': 'los Ajustes de Android' };
   function avisoVista(url) {
@@ -769,12 +1096,15 @@
     if (window.parent !== window) window.parent.postMessage({ tipo: 'lite-lista' }, '*'); // el panel contesta con la configuración
   }
 
-  // ── Cajas con el APK viejo (antes del botón Apps) ─────────────────────────
-  // No tienen el puente TVLite. Mientras se les instala el APK nuevo siguen como
-  // siempre, sin pedir código: saludo, hora, Ver TV (BlackEye) y Ajustes.
-  function esApkViejo() { return !window.TVLite && !leer(CLAVES.caja); }
+  // ── Cajas con un APK de antes del Despertador ─────────────────────────────
+  // El código de activación solo se pide con el APK v2 (el que trae el Despertador).
+  // Las cajas con un APK anterior y sin activar siguen como siempre, sin pedir código:
+  // saludo, hora, Ver TV, Apps (si su APK ya tenía el botón) y Ajustes. Las que ya
+  // se activaron con el código siguen activadas.
+  function apkConDespertador() { try { return !!(window.TVLite && typeof window.TVLite.despertadorEstado === 'function'); } catch (e) { return false; } }
+  function esApkViejo() { return !apkConDespertador() && !leer(CLAVES.caja); }
   function modoViejo() {
-    $('btn-apps').classList.add('oculto');
+    if (!window.TVLite || typeof window.TVLite.getApps !== 'function') $('btn-apps').classList.add('oculto');
     $('btn-extras').classList.add('oculto');
     mostrar('inicio');
   }
@@ -794,7 +1124,7 @@
   }
 
   // Para el banco de pruebas y la vista previa del panel (sin efecto en la caja).
-  window.__lite = { estado: function () { return { pantalla: pantalla, ambient: ambientActivo, videosBloqueados: videosBloqueados, idx: idxAmbient, lista: listaAmbient ? listaAmbient.length : null }; }, ambientYa: function () { ultimaActividad = 0; revisarInactividad(); } };
+  window.__lite = { estado: function () { return { pantalla: pantalla, ambient: ambientActivo, videosBloqueados: videosBloqueados, idx: idxAmbient, lista: listaAmbient ? listaAmbient.length : null, desp: { paso: dPaso, h24: dH24(), m: dM, dias: dDias, foco: dFoco } }; }, ambientYa: function () { ultimaActividad = 0; revisarInactividad(); } };
 })();
 </script>
 </body>
